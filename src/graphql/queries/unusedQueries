@@ -1,0 +1,82 @@
+/* eslint-disable no-unused-vars */
+import {gql} from "graphql-tag";
+
+/*
+ * =====================
+ *      Fragments
+ * =====================
+ */
+
+export const commentInfo = gql`
+fragment commentInfo on IssueCommentConnection {
+  totalCount
+  nodes {
+    publishedAt
+    author {
+      login
+    }
+    body
+    reactions {
+      totalCount
+    }
+  }
+}
+`;
+
+export const langSize = gql`
+fragment langSize on Repository {
+  languages(first: 10) {
+    edges {
+      size
+      node {
+        name
+      }
+    }
+  }
+}
+`;
+
+export const rateLimit = gql`
+fragment rateLimit on Query {
+  rateLimit {
+    cost
+    remaining
+    nodeCount
+  }
+}
+`;
+
+/*
+ * =====================
+ *        Queries
+ * =====================
+ */
+
+
+export const weeklyContributionsQuery = gql`
+query weeklyContributions(
+  $login: String!
+  $fromDate: DateTime
+  $toDate: DateTime
+) {
+  user(login: $login) {
+    name
+    login
+    contributionsCollection(from: $fromDate, to: $toDate) {
+      startedAt
+      endedAt
+      totalCommitContributions
+      totalIssueContributions
+      totalPullRequestContributions
+      totalPullRequestReviewContributions
+    }
+  }
+}
+`;
+
+
+
+
+
+
+

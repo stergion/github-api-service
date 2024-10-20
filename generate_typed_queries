@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+npx graphql-codegen
+
+mv -fv src/__generated__/graphql.ts src/graphql/typed_queries.ts
+
+rm -rfv src/__generated__/
