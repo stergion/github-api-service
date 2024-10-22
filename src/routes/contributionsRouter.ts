@@ -41,9 +41,8 @@ router.get("/issues/from-date/:fromDate/to-date/:toDate", async (req, res) => {
 
     let result: any = dateWindows
         .map(sendQueryWindowedPaginated(octokit, IssuesDocument, issuesQueryVariables))
-        .flatMap(getQueryNodes)
-        .map(streamResponse(res))
-        .flat();
+        .map(getQueryNodes)
+        .map(streamResponse(res));
     result = await Promise.all(result);
 
     res.end();
@@ -66,8 +65,8 @@ router.get("/pullrequests/from-date/:fromDate/to-date/:toDate", async (req, res)
 
     const result = dateWindows
         .map(sendQueryWindowedPaginated(octokit, PullRequestsDocument, pullRequestsVariables))
-        .flatMap(getQueryNodes)
-        .map(streamResponse(res))
+        .map(getQueryNodes)
+        .map(streamResponse(res));
     await Promise.all(result);
 
     res.end();
@@ -96,8 +95,8 @@ router.get("/pullrequest-reviews/from-date/:fromDate/to-date/:toDate", async (re
                 pullrequestReviewsVariables
             )
         )
-        .flatMap(getQueryNodes)
-        .map(streamResponse(res))
+        .map(getQueryNodes)
+        .map(streamResponse(res));
     await Promise.all(result);
 
     res.end();
