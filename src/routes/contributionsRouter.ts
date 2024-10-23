@@ -7,6 +7,7 @@ import {
     IssuesDocument,
     PullRequestReviewsDocument,
     PullRequestsDocument,
+    UserCommitCommentsDocument,
 } from "../graphql/typed_queries.js";
 import { DateWindows } from "../utils/DateWindows.js";
 import { getQueryNodes } from "./helpers/getQueryNodes.js";
@@ -120,20 +121,20 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
     );
 
     const issueComments = [];
+    const dateFilterPropertyName = "publishedAt";
 
     for await (const queryResult of it) {
-        // issueComments.push(...user.issueComments.nodes);
         const nodesArray = await getQueryNodes(queryResult);
         issueComments.push(...nodesArray);
         // Stop fetching if issue comment go too far back in time.
-        if (!!nodesArray.length && fromDate > new Date(nodesArray[0].publishedAt)) break;
+        if (!!nodesArray.length && fromDate > new Date(nodesArray[0][dateFilterPropertyName]))
+            break;
     }
 
     await Promise.all(
         issueComments
-            .filter(windowDateFilter("publishedAt", fromDate, toDate))
+            .filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate))
             .map(streamResponse(res))
-            .map((item, i) => (i === 0 ? Promise.reject("Promise Rejected") : item))
     );
     res.end();
 });
@@ -141,6 +142,33 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
 router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login } = req.params as typeof req.params & { login: string };
+    const fromDate = new Date(req.params.fromDate);
+    const toDate = new Date(req.params.toDate);
 
-    res.status(501).end(JSON.stringify({ message: "Not Implemented" }));
+    const queryVariables: VariablesOf<typeof UserCommitCommentsDocument> = {
+        login: login,
+        cursor: null,
+    };
+    const it = octokit.graphql.paginate.iterator<ResultOf<typeof UserCommitCommentsDocument>>(
+        print(UserCommitCommentsDocument),
+        queryVariables
+    );
+
+    const commitComments = [];
+    const dateFilterPropertyName = "publishedAt";
+
+    for await (const queryResult of it) {
+        const nodesArray = await getQueryNodes(queryResult);
+        commitComments.push(...nodesArray);
+        // Stop fetching if issue comment go too far back in time.
+        if (!!nodesArray.length && fromDate > new Date(nodesArray[0][dateFilterPropertyName]))
+            break;
+    }
+
+    await Promise.all(
+        commitComments
+            .filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate))
+            .map(streamResponse(res))
+    );
+    res.end();
 });
