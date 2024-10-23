@@ -14,7 +14,7 @@ export { router as repositoryRouter };
 
 const router = express.Router({ mergeParams: true });
 
-router.get("/contributed-to/from-date/:fromDate/to-date/:toDate", async (req, res) => {
+router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
@@ -36,7 +36,7 @@ router.get("/contributed-to/from-date/:fromDate/to-date/:toDate", async (req, re
     res.end();
 });
 
-router.get("/commited-to/from-date/:fromDate/to-date/:toDate", async (req, res) => {
+router.get("/commited-to/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;

@@ -26,7 +26,7 @@ router.get("/commits/:githubId/:owner/:name/:fromDate/:toDate", async (req, res)
     res.status(501).end(JSON.stringify({ message: "Not Implemented" }));
 });
 
-router.get("/issues/from-date/:fromDate/to-date/:toDate", async (req, res) => {
+router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
@@ -48,7 +48,7 @@ router.get("/issues/from-date/:fromDate/to-date/:toDate", async (req, res) => {
     res.end();
 });
 
-router.get("/pullrequests/from-date/:fromDate/to-date/:toDate", async (req, res) => {
+router.get("/pullrequests/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
@@ -72,7 +72,7 @@ router.get("/pullrequests/from-date/:fromDate/to-date/:toDate", async (req, res)
     res.end();
 });
 
-router.get("/pullrequest-reviews/from-date/:fromDate/to-date/:toDate", async (req, res) => {
+router.get("/pullrequest-reviews/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
@@ -102,7 +102,7 @@ router.get("/pullrequest-reviews/from-date/:fromDate/to-date/:toDate", async (re
     res.end();
 });
 
-router.get("/issue-comments/from-date/:fromDate/to-date/:toDate", async (req, res) => {
+router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login } = req.params as typeof req.params & { login: string };
     const fromDate = new Date(req.params.fromDate);
@@ -118,7 +118,7 @@ router.get("/issue-comments/from-date/:fromDate/to-date/:toDate", async (req, re
     );
 });
 
-router.get("/commit-comments/from-date/:fromDate/to-date/:toDate", async (req, res) => {
+router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login } = req.params as typeof req.params & { login: string };
 
