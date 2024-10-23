@@ -1,12 +1,12 @@
 import { deepFindPathToProperty, get } from "./deepFindPathToProperty.js";
 
-export { getQueryNodes, MissingPageInfo };
+export { getQueryNodes, MissingNodes as MissingPageInfo };
 
-class MissingPageInfo extends Error {
+class MissingNodes extends Error {
     [key: string]: any;
     constructor(response: any) {
         super(
-            `No pageInfo property found in response. Please make sure to specify the pageInfo in your query. Response-Data: ${JSON.stringify(
+            `No nodes property found in response. Response-Data: ${JSON.stringify(
                 response,
                 null,
                 2
@@ -24,7 +24,7 @@ async function getQueryNodes<TData extends {[key:string]:any}>(responseData: TDa
     const data = await responseData;
     const paginatedResourcePath = deepFindPathToProperty(data, "nodes");
     if (paginatedResourcePath.length === 0) {
-        throw new MissingPageInfo(data);
+        throw new MissingNodes(data);
     }
     return get(data, [...paginatedResourcePath, "nodes"]) as unknown as any[];
 }
