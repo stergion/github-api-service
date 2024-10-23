@@ -12,6 +12,8 @@ import { DateWindows } from "../utils/DateWindows.js";
 import { getQueryNodes } from "./helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "./helpers/sendQueries.js";
 import { streamResponse } from "./helpers/sendStreamChunk.js";
+import { getDirLogger } from "../utils/loggers.js";
+import { windowDateFilter } from "./helpers/windowDateFilter.js";
 
 export { router as contributionsRouter };
 
@@ -116,6 +118,24 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
         print(IssueCommentsDocument),
         queryVariables
     );
+
+    const issueComments = [];
+
+    for await (const queryResult of it) {
+        // issueComments.push(...user.issueComments.nodes);
+        const nodesArray = await getQueryNodes(queryResult);
+        issueComments.push(...nodesArray);
+        // Stop fetching if issue comment go too far back in time.
+        if (!!nodesArray.length && fromDate > new Date(nodesArray[0].publishedAt)) break;
+    }
+
+    await Promise.all(
+        issueComments
+            .filter(windowDateFilter("publishedAt", fromDate, toDate))
+            .map(streamResponse(res))
+            .map((item, i) => (i === 0 ? Promise.reject("Promise Rejected") : item))
+    );
+    res.end();
 });
 
 router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
