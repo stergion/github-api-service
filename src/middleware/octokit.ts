@@ -16,7 +16,7 @@ export function injectOctokit() {
     return async (req: Request, res: Response, next: NextFunction) => {
 
         const octokit = new Octokit({
-            auth: process.env.GITHUB_TOKEN
+            auth: process.env["GITHUB_TOKEN"]
         });
 
         req.octokit = octokit;

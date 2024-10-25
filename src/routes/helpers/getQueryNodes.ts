@@ -1,3 +1,4 @@
+import { FindNestedType } from "../../utils/UtilityTypes.js";
 import { deepFindPathToProperty, get } from "./deepFindPathToProperty.js";
 
 export { getQueryNodes, MissingNodes as MissingPageInfo };
@@ -12,7 +13,7 @@ class MissingNodes extends Error {
                 2
             )}`
         );
-        this.response = response;
+        this["response"] = response;
         if (Error.captureStackTrace) {
             Error.captureStackTrace(this, this.constructor);
         }

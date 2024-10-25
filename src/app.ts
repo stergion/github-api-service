@@ -7,7 +7,7 @@ import { repositoryRouter } from "./routes/repositoryRouter.js";
 import { userRouter } from "./routes/userRoutes.js";
 import { contributionsRouter } from "./routes/contributionsRouter.js";
 
-const port = process.env.PORT ?? 5000;
+const port = process.env["PORT"] ?? 5000;
 
 const app = express();
 

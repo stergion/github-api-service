@@ -23,13 +23,16 @@ function get<TData extends {[key: string]: any}>(object: TData, path: string[]) 
 }
 
 type Mutator = any | ((value: unknown) => any);
+// @ts-ignore
 var set = (object: any, path: string[], mutator: Mutator) => {
     const lastProperty = path[path.length - 1];
     const parentPath = [...path].slice(0, -1);
     const parent = get(object, parentPath);
     if (typeof mutator === "function") {
+        // @ts-ignore
         parent[lastProperty] = mutator(parent[lastProperty]);
     } else {
+        // @ts-ignore
         parent[lastProperty] = mutator;
     }
 };
