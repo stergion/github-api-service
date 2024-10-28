@@ -3,9 +3,9 @@ import "dotenv/config";
 import express from 'express';
 
 import { injectOctokit } from "./middleware/octokit.js";
+import { contributionsRouter } from "./routes/contributionsRouter.js";
 import { repositoryRouter } from "./routes/repositoryRouter.js";
 import { userRouter } from "./routes/userRoutes.js";
-import { contributionsRouter } from "./routes/contributionsRouter.js";
 
 const port = process.env["PORT"] ?? 5000;
 

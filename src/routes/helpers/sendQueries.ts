@@ -1,5 +1,4 @@
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
-import { log } from "console";
 import { print } from "graphql";
 import { Octokit } from "octokit";
 

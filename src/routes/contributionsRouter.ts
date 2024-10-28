@@ -13,7 +13,6 @@ import { DateWindows } from "../utils/DateWindows.js";
 import { getQueryNodes } from "./helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "./helpers/sendQueries.js";
 import { streamResponse } from "./helpers/sendStreamChunk.js";
-import { getDirLogger } from "../utils/loggers.js";
 import { windowDateFilter } from "./helpers/windowDateFilter.js";
 
 export { router as contributionsRouter };
