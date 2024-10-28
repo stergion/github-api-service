@@ -1,4 +1,3 @@
-import { FindNestedType } from "../../utils/UtilityTypes.js";
 import { deepFindPathToProperty, get } from "./deepFindPathToProperty.js";
 
 export { getQueryNodes, MissingNodes as MissingPageInfo };
