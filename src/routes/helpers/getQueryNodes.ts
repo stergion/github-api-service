@@ -20,11 +20,13 @@ class MissingNodes extends Error {
     name = "MissingPageInfo";
 }
 
-async function getQueryNodes<TData extends {[key:string]:any}>(responseData: TData): Promise<Awaited<any[]>> {
+async function getQueryNodes<TData extends Record<string,any>(
+    responseData: TData
+): Promise<Awaited<any[]>> {
     const data = await responseData;
     const paginatedResourcePath = deepFindPathToProperty(data, "nodes");
     if (paginatedResourcePath.length === 0) {
         throw new MissingNodes(data);
     }
-    return get(data, [...paginatedResourcePath, "nodes"]) as unknown as any[];
+    return get(data, [...paginatedResourcePath, "nodes"]) as any[];
 }
