@@ -1,3 +1,5 @@
+import { InferNestedType } from "../../utils/UtilityTypes.js";
+
 export { deepFindPathToProperty, get, set };
 
 var isObject = (value: any) => Object.prototype.toString.call(value) === "[object Object]";
@@ -18,8 +20,14 @@ function deepFindPathToProperty(object: any, searchProp: string, path: string[] 
     }
     return [];
 }
-function get<TData extends {[key: string]: any}>(object: TData, path: string[]) {
-    return path.reduce((current, nextProperty) => current[nextProperty], object);
+function get<TData extends { [key: string]: any }, TPath extends readonly string[]>(
+    object: TData,
+    path: TPath
+): InferNestedType<TData, TPath> {
+    return path.reduce((current, nextProperty) => current[nextProperty], object) as InferNestedType<
+        TData,
+        TPath
+    >;
 }
 
 type Mutator = any | ((value: unknown) => any);
