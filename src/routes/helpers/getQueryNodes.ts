@@ -20,7 +20,7 @@ class MissingNodes extends Error {
     name = "MissingPageInfo";
 }
 
-async function getQueryNodes<TData extends Record<string,any>(
+async function getQueryNodes<TData extends Record<string,any>>(
     responseData: TData
 ): Promise<Awaited<any[]>> {
     const data = await responseData;
