@@ -8,7 +8,6 @@ export { router as userRouter };
 const router = express.Router({ mergeParams: true });
 
 router.get("/:login", async (req, res) => {
-    // ts-ignore
     const { octokit, params: { login } } = req;
 
     const userInfo = await octokit.graphql<UserInfoQuery>(print(UserInfoDocument), { login: login });
