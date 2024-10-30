@@ -27,7 +27,6 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
     };
 
     const result = dateWindows
-        // .map(sendContributedToQuery(login, octokit))
         .map(sendQueryWindowed(octokit, RepositoriesContributedToDocument, queryVariables))
         .map(streamResponse(res))
         .map(async (item) => console.log(await item));
@@ -56,31 +55,3 @@ router.get("/commited-to/from/:fromDate/to/:toDate", async (req, res) => {
 
     res.end();
 });
-
-// function sendContributedToQuery(login: string, octokit: Octokit) {
-//     return ([toDate, fromDate]: [Date, Date]) => {
-//         const queryProperties: RepositoriesContributedToQueryVariables = {
-//             login: login,
-//             fromDate: fromDate,
-//             toDate: toDate,
-//         };
-//         return octokit.graphql<RepositoriesContributedToQuery>(
-//             print(RepositoriesContributedToDocument),
-//             queryProperties
-//         );
-//     };
-// }
-
-// function sendCommitedToQuery(login: string, octokit: Octokit) {
-//     return ([toDate, fromDate]: [Date, Date]) => {
-//         const queryProperties: RepositoriesCommitedToQueryVariables = {
-//             login: login,
-//             fromDate: fromDate,
-//             toDate: toDate,
-//         };
-//         return octokit.graphql<RepositoriesCommitedToQuery>(
-//             print(RepositoriesContributedToDocument),
-//             queryProperties
-//         );
-//     };
-// }
