@@ -8,11 +8,10 @@ import {
     IssueCommentsDocument,
     IssuesDocument,
     PullRequestReviewsDocument,
-    PullRequestsDocument,
-    UserInfoDocument
+    PullRequestsDocument
 } from "../graphql/typed_queries.js";
+import { fetchUserInfo } from "../service/UserService.js";
 import { DateWindows } from "../utils/DateWindows.js";
-import NotGithubUser from "../utils/errors/NotGithubUser.js";
 import { getQueryNodes } from "./helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "./helpers/sendQueries.js";
 import { streamResponse } from "./helpers/sendStreamChunk.js";
@@ -31,17 +30,7 @@ router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
     const fromDate = new Date(req.params.fromDate);
     const toDate = new Date(req.params.toDate);
 
-    const userInfoVariables: VariablesOf<typeof UserInfoDocument> = {
-        login,
-    };
-    const userInfo = await octokit.graphql<ResultOf<typeof UserInfoDocument>>(
-        print(UserInfoDocument),
-        userInfoVariables
-    );
-
-    if (!userInfo.user) {
-        throw new NotGithubUser(login);
-    }
+    const userInfo = await fetchUserInfo(octokit, login);
 
     const commitsQueryVariables: VariablesOf<typeof CommitsDocument> = {
         owner,
