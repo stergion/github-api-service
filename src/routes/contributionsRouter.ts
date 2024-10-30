@@ -3,13 +3,13 @@ import { print } from "graphql";
 
 import { ResultOf, VariablesOf } from "@graphql-typed-document-node/core";
 import {
+    CommitCommentsDocument,
     CommitsDocument,
     IssueCommentsDocument,
     IssuesDocument,
     PullRequestReviewsDocument,
     PullRequestsDocument,
-    UserCommitCommentsDocument,
-    UserInfoDocument,
+    UserInfoDocument
 } from "../graphql/typed_queries.js";
 import { DateWindows } from "../utils/DateWindows.js";
 import NotGithubUser from "../utils/errors/NotGithubUser.js";
@@ -181,12 +181,12 @@ router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const fromDate = new Date(req.params.fromDate);
     const toDate = new Date(req.params.toDate);
 
-    const queryVariables: VariablesOf<typeof UserCommitCommentsDocument> = {
+    const queryVariables: VariablesOf<typeof CommitCommentsDocument> = {
         login: login,
         cursor: null,
     };
-    const it = octokit.graphql.paginate.iterator<ResultOf<typeof UserCommitCommentsDocument>>(
-        print(UserCommitCommentsDocument),
+    const it = octokit.graphql.paginate.iterator<ResultOf<typeof CommitCommentsDocument>>(
+        print(CommitCommentsDocument),
         queryVariables
     );
 
