@@ -1,21 +1,21 @@
 import express from "express";
-import { print } from "graphql";
 
-import { ResultOf, VariablesOf } from "@graphql-typed-document-node/core";
+import { VariablesOf } from "@graphql-typed-document-node/core";
 import {
-    CommitCommentsDocument,
-    CommitsDocument,
-    IssueCommentsDocument,
     IssuesDocument,
     PullRequestReviewsDocument,
-    PullRequestsDocument
+    PullRequestsDocument,
 } from "../graphql/typed_queries.js";
+import {
+    fetchCommitComments,
+    fetchIssueComments,
+    fetchRepositoryCommits,
+} from "../service/ContributionsService.js";
 import { fetchUserInfo } from "../service/UserService.js";
 import { DateWindows } from "../utils/DateWindows.js";
 import { getQueryNodes } from "./helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "./helpers/sendQueries.js";
 import { streamResponse } from "./helpers/sendStreamChunk.js";
-import { windowDateFilter } from "./helpers/windowDateFilter.js";
 
 export { router as contributionsRouter };
 
@@ -32,22 +32,14 @@ router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
 
     const userInfo = await fetchUserInfo(octokit, login);
 
-    const commitsQueryVariables: VariablesOf<typeof CommitsDocument> = {
+    const commits = await fetchRepositoryCommits(
+        octokit,
+        userInfo.user.id,
         owner,
         name,
-        authorId: userInfo.user.id,
         fromDate,
-        toDate,
-        cursor: null,
-    };
-
-    const commitsQueryFn = sendQueryWindowedPaginated(
-        octokit,
-        CommitsDocument,
-        commitsQueryVariables
+        toDate
     );
-    const commitsQueryResult = await commitsQueryFn([fromDate, toDate]);
-    const commits = await getQueryNodes(commitsQueryResult);
 
     await Promise.all(commits.map(streamResponse(res)));
 
@@ -136,31 +128,10 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const fromDate = new Date(req.params.fromDate);
     const toDate = new Date(req.params.toDate);
 
-    const queryVariables: VariablesOf<typeof IssueCommentsDocument> = {
-        login: login,
-        cursor: null,
-    };
-    const it = octokit.graphql.paginate.iterator<ResultOf<typeof IssueCommentsDocument>>(
-        print(IssueCommentsDocument),
-        queryVariables
-    );
+    const issueComments = await fetchIssueComments(octokit, login, fromDate, toDate);
 
-    const issueComments = [];
-    const dateFilterPropertyName = "publishedAt";
+    await Promise.all(issueComments.map(streamResponse(res)));
 
-    for await (const queryResult of it) {
-        const nodesArray = await getQueryNodes(queryResult);
-        issueComments.push(...nodesArray);
-        // Stop fetching if issue comment go too far back in time.
-        if (!!nodesArray.length && fromDate > new Date(nodesArray[0][dateFilterPropertyName]))
-            break;
-    }
-
-    await Promise.all(
-        issueComments
-            .filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate))
-            .map(streamResponse(res))
-    );
     res.end();
 });
 
@@ -170,30 +141,9 @@ router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const fromDate = new Date(req.params.fromDate);
     const toDate = new Date(req.params.toDate);
 
-    const queryVariables: VariablesOf<typeof CommitCommentsDocument> = {
-        login: login,
-        cursor: null,
-    };
-    const it = octokit.graphql.paginate.iterator<ResultOf<typeof CommitCommentsDocument>>(
-        print(CommitCommentsDocument),
-        queryVariables
-    );
+    const commitComments = await fetchCommitComments(octokit, login, fromDate, toDate);
 
-    const commitComments = [];
-    const dateFilterPropertyName = "publishedAt";
+    await Promise.all(commitComments.map(streamResponse(res)));
 
-    for await (const queryResult of it) {
-        const nodesArray = await getQueryNodes(queryResult);
-        commitComments.push(...nodesArray);
-        // Stop fetching if issue comment go too far back in time.
-        if (!!nodesArray.length && fromDate > new Date(nodesArray[0][dateFilterPropertyName]))
-            break;
-    }
-
-    await Promise.all(
-        commitComments
-            .filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate))
-            .map(streamResponse(res))
-    );
     res.end();
 });
