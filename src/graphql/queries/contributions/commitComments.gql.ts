@@ -1,7 +1,7 @@
 import { gql } from "graphql-tag";
 
 export const commitComments = gql`
-    query userCommitComments($login: String!, $cursor: String) {
+    query commitComments($login: String!, $cursor: String) {
         user(login: $login) {
             commitComments(last: 100, before: $cursor) {
                 totalCount

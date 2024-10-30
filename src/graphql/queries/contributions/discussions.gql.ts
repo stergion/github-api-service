@@ -1,7 +1,7 @@
 import { gql } from "graphql-tag";
 
 export const discussions = gql`
-    query userDiscussions($login: String!) {
+    query discussions($login: String!) {
         user(login: $login) {
             name
             login
