@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Octokit } from "octokit";
+import { getAuthenticatedInstance } from "../octokit/octokit.js";
 
 declare global {
     namespace Express {
@@ -14,12 +15,7 @@ declare global {
  */
 export function injectOctokit() {
     return async (req: Request, res: Response, next: NextFunction) => {
-
-        const octokit = new Octokit({
-            auth: process.env["GITHUB_TOKEN"]
-        });
-
-        req.octokit = octokit;
+        req.octokit = getAuthenticatedInstance();
 
         next();
     };
