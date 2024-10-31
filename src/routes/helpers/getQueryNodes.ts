@@ -1,4 +1,4 @@
-import { deepFindPathToProperty, get } from "./deepFindPathToProperty.js";
+import { deepFindPathToProperty, get } from "../../utils/deepFindPathToProperty.js";
 
 export { getQueryNodes, MissingNodes };
 

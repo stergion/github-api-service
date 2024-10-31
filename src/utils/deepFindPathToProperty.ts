@@ -1,4 +1,4 @@
-import { InferNestedType } from "../../utils/UtilityTypes.js";
+import { InferNestedType } from "./UtilityTypes.js";
 
 export { deepFindPathToProperty, get, set };
 
@@ -20,6 +20,7 @@ function deepFindPathToProperty(object: any, searchProp: string, path: string[] 
     }
     return [];
 }
+
 function get<TData extends { [key: string]: any }, TPath extends readonly string[]>(
     object: TData,
     path: TPath
