@@ -1,6 +1,6 @@
 import { deepFindPathToProperty, get } from "./deepFindPathToProperty.js";
 
-export { getQueryNodes, MissingNodes as MissingPageInfo };
+export { getQueryNodes, MissingNodes };
 
 class MissingNodes extends Error {
     [key: string]: any;
@@ -17,10 +17,10 @@ class MissingNodes extends Error {
             Error.captureStackTrace(this, this.constructor);
         }
     }
-    name = "MissingPageInfo";
+    name = "MissingNodes";
 }
 
-async function getQueryNodes<TData extends Record<string,any>>(
+async function getQueryNodes<TData extends Record<string, any>>(
     responseData: TData
 ): Promise<Awaited<any[]>> {
     const data = await responseData;
