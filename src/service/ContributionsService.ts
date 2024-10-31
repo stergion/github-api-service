@@ -15,6 +15,7 @@ import { getQueryNodes } from "../routes/helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "../routes/helpers/sendQueries.js";
 import { windowDateFilter } from "../routes/helpers/windowDateFilter.js";
 import { GetNestedType } from "../utils/UtilityTypes.js";
+import { Commit, CommitComment, CommitWithFiles, IssueComment } from "../graphql/dto_types.js";
 
 export async function fetchRepositoryCommits(
     octokit: Octokit,
@@ -34,7 +35,7 @@ export async function fetchRepositoryCommits(
 
     const injectCommitFiles = async (commit: CommitInfoFragment) => {
         const files = await fetchCommitFilesFunction(commit);
-        return { ...commit, files } as CommitInfoFragment & { files: typeof files };
+        return { ...commit, files } as CommitWithFiles;
     };
 
     const commitsQueryVariables: CommitsQueryVariables = {
@@ -52,7 +53,7 @@ export async function fetchRepositoryCommits(
     );
 
     const commitsQueryResult = commitsQueryFn([fromDate, toDate]);
-    const commits = (await getQueryNodes(commitsQueryResult)) as CommitInfoFragment[];
+    const commits = (await getQueryNodes(commitsQueryResult)) as Commit[];
 
     return await Promise.all(commits.map(injectCommitFiles));
 }
@@ -82,8 +83,7 @@ export async function fetchCommitComments(
         queryVariables
     );
 
-    const commitComments: GetNestedType<CommitCommentsQuery, ["user", "commitComments", "nodes"]> =
-        [];
+    const commitComments: CommitComment[] = [];
 
     for await (const queryResult of it) {
         const nodesArray = await getQueryNodes(queryResult);
@@ -112,7 +112,7 @@ export async function fetchIssueComments(
         queryVariables
     );
 
-    const issueComments: GetNestedType<IssueCommentsQuery, ["user", "issueComments", "nodes"]> = [];
+    const issueComments: IssueComment[] = [];
 
     for await (const queryResult of it) {
         const nodesArray = await getQueryNodes(queryResult);

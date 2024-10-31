@@ -7,10 +7,7 @@ import {
     UserInfoQueryVariables,
 } from "../graphql/typed_queries.js";
 import NotGithubUser from "../utils/errors/NotGithubUser.js";
-
-type NonNullableUserInfoQuery = Omit<UserInfoQuery, "user"> & {
-    user: NonNullable<UserInfoQuery["user"]>;
-};
+import { UserInfo } from "../graphql/dto_types.js";
 
 export async function fetchUserInfo(octokit: Octokit, login: string) {
     const userInfoVariables: UserInfoQueryVariables = {
@@ -26,5 +23,5 @@ export async function fetchUserInfo(octokit: Octokit, login: string) {
         throw new NotGithubUser(login);
     }
 
-    return userInfo as NonNullableUserInfoQuery;
+    return userInfo as UserInfo;
 }
