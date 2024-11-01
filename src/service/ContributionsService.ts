@@ -1,5 +1,7 @@
 import { print } from "graphql";
 import { Octokit } from "octokit";
+
+import { Commit, CommitComment, CommitWithFiles, IssueComment } from "../graphql/dto_types.js";
 import {
     CommitCommentsDocument,
     CommitCommentsQuery,
@@ -14,8 +16,6 @@ import {
 import { getQueryNodes } from "../routes/helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "../routes/helpers/sendQueries.js";
 import { windowDateFilter } from "../routes/helpers/windowDateFilter.js";
-import { GetNestedType } from "../utils/UtilityTypes.js";
-import { Commit, CommitComment, CommitWithFiles, IssueComment } from "../graphql/dto_types.js";
 
 export async function fetchRepositoryCommits(
     octokit: Octokit,

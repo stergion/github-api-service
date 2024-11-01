@@ -59,11 +59,11 @@ router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
         // cursor: null,
     };
 
-    let result: any = dateWindows
+    let result = dateWindows
         .map(sendQueryWindowedPaginated(octokit, IssuesDocument, issuesQueryVariables))
         .map(getQueryNodes)
         .map(streamResponse(res));
-    result = await Promise.all(result);
+    await Promise.all(result);
 
     res.end();
 });
