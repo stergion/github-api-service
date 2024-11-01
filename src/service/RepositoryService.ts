@@ -1,17 +1,17 @@
+import { print } from "graphql";
 import { Octokit } from "octokit";
+
+import { Repository } from "../graphql/dto_types.js";
 import {
-    RepositoriesContributedToQueryVariables,
     RepositoriesContributedToDocument,
     RepositoriesContributedToQuery,
-    RepositoryQueryVariables,
+    RepositoriesContributedToQueryVariables,
     RepositoryDocument,
     RepositoryQuery,
+    RepositoryQueryVariables,
 } from "../graphql/typed_queries.js";
 import { sendQueryWindowed } from "../routes/helpers/sendQueries.js";
 import { DateWindows } from "../utils/DateWindows.js";
-import { print } from "graphql";
-import { set } from "../utils/deepFindPathToProperty.js";
-import { Repository } from "../graphql/dto_types.js";
 
 type NameWithOwnerWrappedObject = {
     repository: {
