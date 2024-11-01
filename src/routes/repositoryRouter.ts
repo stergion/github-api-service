@@ -3,9 +3,8 @@ import express from "express";
 import {
     RepositoriesCommitedToDocument,
     RepositoriesCommitedToQueryVariables,
-    RepositoriesContributedToDocument,
-    RepositoriesContributedToQueryVariables,
 } from "../graphql/typed_queries.js";
+import { fetchRepositoriesContributedToInfo } from "../service/RepositoryService.js";
 import { DateWindows } from "../utils/DateWindows.js";
 import { sendQueryWindowed } from "./helpers/sendQueries.js";
 import { streamResponse } from "./helpers/sendStreamChunk.js";
@@ -19,19 +18,20 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
     };
+    console.log("here");
 
-    const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
+    const it = fetchRepositoriesContributedToInfo(
+        octokit,
+        login,
+        new Date(fromDate),
+        new Date(toDate)
+    );
 
-    const queryVariables: RepositoriesContributedToQueryVariables = {
-        login: login,
-    };
-
-    const result = dateWindows
-        .map(sendQueryWindowed(octokit, RepositoriesContributedToDocument, queryVariables))
-        .map(streamResponse(res))
-        .map(async (item) => console.log(await item));
-    await Promise.all(result);
-
+    const stream = streamResponse(res)
+    for await (const repository of it) {
+        stream(repository);
+    }
+    
     res.end();
 });
 
