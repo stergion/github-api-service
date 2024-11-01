@@ -8,8 +8,7 @@ import {
     IssuesQuery,
     PullRequestReviewsQuery,
     PullRequestsQuery,
-    RepositoriesCommitedToQuery,
-    RepositoriesContributedToQuery,
+    RepositoryQuery,
     UserInfoQuery,
 } from "./typed_queries.js";
 
@@ -22,6 +21,7 @@ export {
     IssueComment,
     PullRequest,
     PullRequestReviews,
+    Repository,
     NonNullableUserInfoQuery as UserInfo,
 };
 
@@ -65,3 +65,5 @@ type PullRequestReviews = NonNullable<
         ["user", "contributionsCollection", "pullRequestReviewContributions", "nodes"]
     >[number]
 >;
+
+type Repository = NonNullable<RepositoryQuery["repository"]>;
