@@ -2,7 +2,7 @@ import express from 'express';
 
 import { fetchUserInfo } from "../service/UserService.js";
 
-export { router as userRouter };
+export { router as UserRouter };
 
 const router = express.Router({ mergeParams: true });
 

@@ -9,7 +9,7 @@ import { DateWindows } from "../utils/DateWindows.js";
 import { sendQueryWindowed } from "./helpers/sendQueries.js";
 import { streamResponse } from "./helpers/sendStreamChunk.js";
 
-export { router as repositoryRouter };
+export { router as UserRepositoryRouter };
 
 const router = express.Router({ mergeParams: true });
 
@@ -35,7 +35,7 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
     res.end();
 });
 
-router.get("/commited-to/from/:fromDate/to/:toDate", async (req, res) => {
+router.get("/repositories/commited-to/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;

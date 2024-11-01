@@ -17,7 +17,7 @@ import { getQueryNodes } from "./helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "./helpers/sendQueries.js";
 import { streamResponse } from "./helpers/sendStreamChunk.js";
 
-export { router as contributionsRouter };
+export { router as UserContributionsRouter };
 
 const router = express.Router({ mergeParams: true });
 
