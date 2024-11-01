@@ -1,12 +1,9 @@
 import express from "express";
 
 import {
-    RepositoriesCommitedToDocument,
-    RepositoriesCommitedToQueryVariables,
-} from "../graphql/typed_queries.js";
-import { fetchRepositoriesContributedToInfo } from "../service/RepositoryService.js";
-import { DateWindows } from "../utils/DateWindows.js";
-import { sendQueryWindowed } from "./helpers/sendQueries.js";
+    fetchRepositoriesCommitedToInfo,
+    fetchRepositoriesContributedToInfo,
+} from "../service/RepositoryService.js";
 import { streamResponse } from "./helpers/sendStreamChunk.js";
 
 export { router as UserRepositoryRouter };
@@ -18,7 +15,6 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
     };
-    console.log("here");
 
     const it = fetchRepositoriesContributedToInfo(
         octokit,
@@ -27,11 +23,11 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
         new Date(toDate)
     );
 
-    const stream = streamResponse(res)
+    const stream = streamResponse(res);
     for await (const repository of it) {
         stream(repository);
     }
-    
+
     res.end();
 });
 
@@ -41,17 +37,17 @@ router.get("/repositories/commited-to/from/:fromDate/to/:toDate", async (req, re
         login: string;
     };
 
-    const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
+    const it = fetchRepositoriesCommitedToInfo(
+        octokit,
+        login,
+        new Date(fromDate),
+        new Date(toDate)
+    );
 
-    const queryVariables: RepositoriesCommitedToQueryVariables = {
-        login: login,
-    };
-
-    const result = dateWindows
-        .map(sendQueryWindowed(octokit, RepositoriesCommitedToDocument, queryVariables))
-        .map(streamResponse(res))
-        .map(async (item) => console.log(await item));
-    await Promise.all(result);
+    const stream = streamResponse(res);
+    for await (const repository of it) {
+        stream(repository);
+    }
 
     res.end();
 });
