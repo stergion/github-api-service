@@ -139,10 +139,12 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const fromDate = new Date(req.params.fromDate);
     const toDate = new Date(req.params.toDate);
 
+    const promises = [];
     const it = fetchIssueComments(octokit, login, fromDate, toDate);
     for await (const comments of it) {
-        stream.streamResponse(comments);
+        promises.push(stream.streamResponse(comments));
     }
+    await Promise.all(promises);
 
     res.end();
 });
