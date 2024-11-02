@@ -29,5 +29,4 @@ export type FindNestedType<T, K extends string> = K extends keyof T
         : never
     : never;
 
-
-
+export type DateKeys = "createdAt" | "updatedAt" | "publishedAt" | "lastEditedAt"
