@@ -4,7 +4,7 @@ import {
     fetchRepositoriesCommitedToInfo,
     fetchRepositoriesContributedToInfo,
 } from "../service/RepositoryService.js";
-import { streamResponse } from "./helpers/sendStreamChunk.js";
+import { SSEStream } from "../utils/SSEStream.js";
 
 export { router as UserRepositoryRouter };
 
@@ -16,6 +16,8 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
         login: string;
     };
 
+    const stream = new SSEStream(res);
+
     const it = fetchRepositoriesContributedToInfo(
         octokit,
         login,
@@ -23,10 +25,11 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
         new Date(toDate)
     );
 
-    const stream = streamResponse(res);
+    const promises = [];
     for await (const repository of it) {
-        stream(repository);
+        promises.push(stream.streamResponse(repository));
     }
+    await Promise.all(promises);
 
     res.end();
 });
@@ -37,6 +40,8 @@ router.get("/repositories/commited-to/from/:fromDate/to/:toDate", async (req, re
         login: string;
     };
 
+    const stream = new SSEStream(res);
+
     const it = fetchRepositoriesCommitedToInfo(
         octokit,
         login,
@@ -44,10 +49,11 @@ router.get("/repositories/commited-to/from/:fromDate/to/:toDate", async (req, re
         new Date(toDate)
     );
 
-    const stream = streamResponse(res);
+    const promises = [];
     for await (const repository of it) {
-        stream(repository);
+        promises.push(stream.streamResponse(repository));
     }
+    await Promise.all(promises);
 
     res.end();
 });

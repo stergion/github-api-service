@@ -13,9 +13,9 @@ import {
 } from "../service/ContributionsService.js";
 import { fetchUserInfo } from "../service/UserService.js";
 import { DateWindows } from "../utils/DateWindows.js";
+import { SSEStream } from "../utils/SSEStream.js";
 import { getQueryNodes } from "./helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "./helpers/sendQueries.js";
-import { streamResponse } from "./helpers/sendStreamChunk.js";
 
 export { router as UserContributionsRouter };
 
@@ -30,6 +30,8 @@ router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
     const fromDate = new Date(req.params.fromDate);
     const toDate = new Date(req.params.toDate);
 
+    const stream = new SSEStream(res);
+
     const userInfo = await fetchUserInfo(octokit, login);
 
     const commits = await fetchRepositoryCommits(
@@ -41,7 +43,7 @@ router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
         toDate
     );
 
-    await Promise.all(commits.map(streamResponse(res)));
+    await Promise.all(commits.map(stream.streamResponse.bind(stream)));
 
     res.end();
 });
@@ -51,6 +53,8 @@ router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
     };
+
+    const stream = new SSEStream(res);
 
     const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
 
@@ -62,7 +66,7 @@ router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
     let result = dateWindows
         .map(sendQueryWindowedPaginated(octokit, IssuesDocument, issuesQueryVariables))
         .map(getQueryNodes)
-        .map(streamResponse(res));
+        .map(stream.streamResponse.bind(stream));
     await Promise.all(result);
 
     res.end();
@@ -73,6 +77,8 @@ router.get("/pullrequests/from/:fromDate/to/:toDate", async (req, res) => {
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
     };
+
+    const stream = new SSEStream(res);
 
     const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
 
@@ -86,7 +92,7 @@ router.get("/pullrequests/from/:fromDate/to/:toDate", async (req, res) => {
     const result = dateWindows
         .map(sendQueryWindowedPaginated(octokit, PullRequestsDocument, pullRequestsVariables))
         .map(getQueryNodes)
-        .map(streamResponse(res));
+        .map(stream.streamResponse.bind(stream));
     await Promise.all(result);
 
     res.end();
@@ -97,6 +103,8 @@ router.get("/pullrequest-reviews/from/:fromDate/to/:toDate", async (req, res) =>
     const { login, fromDate, toDate } = req.params as typeof req.params & {
         login: string;
     };
+
+    const stream = new SSEStream(res);
 
     const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
 
@@ -116,7 +124,7 @@ router.get("/pullrequest-reviews/from/:fromDate/to/:toDate", async (req, res) =>
             )
         )
         .map(getQueryNodes)
-        .map(streamResponse(res));
+        .map(stream.streamResponse.bind(stream));
     await Promise.all(result);
 
     res.end();
@@ -141,9 +149,11 @@ router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const fromDate = new Date(req.params.fromDate);
     const toDate = new Date(req.params.toDate);
 
+    const stream = new SSEStream(res);
+
     const commitComments = await fetchCommitComments(octokit, login, fromDate, toDate);
 
-    await Promise.all(commitComments.map(streamResponse(res)));
+    await Promise.all(commitComments.map(stream.streamResponse.bind(stream)));
 
     res.end();
 });
