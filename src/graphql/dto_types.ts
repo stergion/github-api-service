@@ -20,7 +20,7 @@ export {
     Issue,
     IssueComment,
     PullRequest,
-    PullRequestReviews,
+    PullRequestReview,
     Repository,
     NonNullableUserInfoQuery as UserInfo,
 };
@@ -38,12 +38,12 @@ type Commit = CommitInfoFragment;
 type CommitWithFiles = CommitInfoFragment & { files: CommitFile[] };
 
 type CommitComment = NonNullable<
-    GetNestedType<CommitCommentsQuery, ["user", "commitComments", "nodes"]>
->[number];
+    NonNullable<GetNestedType<CommitCommentsQuery, ["user", "commitComments", "nodes"]>>[number]
+>;
 
 type IssueComment = NonNullable<
-    GetNestedType<IssueCommentsQuery, ["user", "issueComments", "nodes"]>
->[number];
+    NonNullable<GetNestedType<IssueCommentsQuery, ["user", "issueComments", "nodes"]>>[number]
+>;
 
 type Issue = NonNullable<
     GetNestedType<
@@ -59,7 +59,7 @@ type PullRequest = NonNullable<
     >[number]
 >;
 
-type PullRequestReviews = NonNullable<
+type PullRequestReview = NonNullable<
     GetNestedType<
         PullRequestReviewsQuery,
         ["user", "contributionsCollection", "pullRequestReviewContributions", "nodes"]
