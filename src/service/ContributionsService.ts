@@ -16,6 +16,7 @@ import {
 import { getQueryNodes } from "../routes/helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "../routes/helpers/sendQueries.js";
 import { windowDateFilter } from "../routes/helpers/windowDateFilter.js";
+import { DateKeys } from "../utils/UtilityTypes.js";
 
 export async function fetchRepositoryCommits(
     octokit: Octokit,
@@ -96,12 +97,14 @@ export async function fetchCommitComments(
     return commitComments.filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate));
 }
 
-export async function fetchIssueComments(
+type IssueCommentDatesFilter = Extract<keyof IssueComment, DateKeys>;
+
+export async function* fetchIssueComments(
     octokit: Octokit,
     login: string,
     fromDate: Date,
     toDate: Date,
-    dateFilterPropertyName: string = "publishedAt"
+    dateFilterPropertyName: IssueCommentDatesFilter = "publishedAt"
 ) {
     const queryVariables: IssueCommentsQueryVariables = {
         login: login,
@@ -112,15 +115,12 @@ export async function fetchIssueComments(
         queryVariables
     );
 
-    const issueComments: IssueComment[] = [];
-
     for await (const queryResult of it) {
-        const nodesArray = await getQueryNodes(queryResult);
-        issueComments.push(...nodesArray);
+        const nodesArray = (await getQueryNodes(queryResult)) as IssueComment[];
+        yield nodesArray.filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate));
+        // @ts-ignore
         // Stop fetching if issue comment go too far back in time.
         if (!!nodesArray.length && fromDate > new Date(nodesArray[0][dateFilterPropertyName]))
             break;
     }
-
-    return issueComments.filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate));
 }

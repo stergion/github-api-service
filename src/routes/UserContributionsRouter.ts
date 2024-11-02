@@ -133,12 +133,16 @@ router.get("/pullrequest-reviews/from/:fromDate/to/:toDate", async (req, res) =>
 router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login } = req.params as typeof req.params & { login: string };
+
+    const stream = new SSEStream(res);
+
     const fromDate = new Date(req.params.fromDate);
     const toDate = new Date(req.params.toDate);
 
-    const issueComments = await fetchIssueComments(octokit, login, fromDate, toDate);
-
-    await Promise.all(issueComments.map(streamResponse(res)));
+    const it = fetchIssueComments(octokit, login, fromDate, toDate);
+    for await (const comments of it) {
+        stream.streamResponse(comments);
+    }
 
     res.end();
 });
