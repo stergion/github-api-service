@@ -69,12 +69,14 @@ export async function fetchCommitFiles(
     return commitRest.data.files;
 }
 
-export async function fetchCommitComments(
+type CommitCommentDatesFilter = Extract<keyof CommitComment, DateKeys>;
+
+export async function* fetchCommitComments(
     octokit: Octokit,
     login: string,
     fromDate: Date,
     toDate: Date,
-    dateFilterPropertyName: string = "publishedAt"
+    dateFilterPropertyName: CommitCommentDatesFilter = "publishedAt"
 ) {
     const queryVariables: CommitCommentsQueryVariables = {
         login: login,
@@ -84,17 +86,14 @@ export async function fetchCommitComments(
         queryVariables
     );
 
-    const commitComments: CommitComment[] = [];
-
     for await (const queryResult of it) {
-        const nodesArray = await getQueryNodes(queryResult);
-        commitComments.push(...nodesArray);
+        const nodesArray = (await getQueryNodes(queryResult)) as CommitComment[];
+        yield nodesArray.filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate));
+        // @ts-ignore
         // Stop fetching if issue comment go too far back in time.
         if (!!nodesArray.length && fromDate > new Date(nodesArray[0][dateFilterPropertyName]))
             break;
     }
-
-    return commitComments.filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate));
 }
 
 type IssueCommentDatesFilter = Extract<keyof IssueComment, DateKeys>;

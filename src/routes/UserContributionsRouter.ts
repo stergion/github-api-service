@@ -150,14 +150,19 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
 router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login } = req.params as typeof req.params & { login: string };
-    const fromDate = new Date(req.params.fromDate);
-    const toDate = new Date(req.params.toDate);
 
     const stream = new SSEStream(res);
 
-    const commitComments = await fetchCommitComments(octokit, login, fromDate, toDate);
+    const fromDate = new Date(req.params.fromDate);
+    const toDate = new Date(req.params.toDate);
 
-    await Promise.all(commitComments.map(stream.streamResponse.bind(stream)));
+    const it = fetchCommitComments(octokit, login, fromDate, toDate);
+
+    const promises = [];
+    for await (const comments of it) {
+        promises.push(stream.streamResponse(comments));
+    }
+    await Promise.all(promises);
 
     res.end();
 });
