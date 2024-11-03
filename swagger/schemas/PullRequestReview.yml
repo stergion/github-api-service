@@ -1,0 +1,95 @@
+components:
+    schemas:
+        PullRequestReview:
+            type: object
+            required:
+                - id
+                - url
+                - state
+                - body
+                - repository
+                - pullRequest
+                - comments
+            properties:
+                id:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                publishedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                submittedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                lastEditedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                state:
+                    type: string
+                    enum: [PENDING, COMMENTED, APPROVED, CHANGES_REQUESTED, DISMISSED]
+                body:
+                    type: string
+                repository:
+                    type: object
+                    required:
+                        - name
+                        - owner
+                    properties:
+                        name:
+                            type: string
+                        owner:
+                            type: object
+                            required:
+                                - login
+                            properties:
+                                login:
+                                    type: string
+                pullRequest:
+                    type: object
+                    required:
+                        - id
+                        - url
+                    properties:
+                        id:
+                            type: string
+                        url:
+                            type: string
+                            format: uri
+                comments:
+                    type: object
+                    required:
+                        - totalCount
+                    properties:
+                        totalCount:
+                            type: integer
+                        nodes:
+                            type: array
+                            items:
+                                type: object
+                                required:
+                                    - id
+                                    - url
+                                    - body
+                                properties:
+                                    id:
+                                        type: string
+                                    url:
+                                        type: string
+                                        format: uri
+                                    body:
+                                        type: string
+                                    author:
+                                        type: object
+                                        properties:
+                                            login:
+                                                type: string

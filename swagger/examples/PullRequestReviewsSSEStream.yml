@@ -1,0 +1,82 @@
+components:
+    examples:
+        PullRequestReviewsSSEStream:
+            summary: Example SSE stream of pull request reviews
+            value: |
+                data: {
+                  "id": "PRR_kwDOAB12345",
+                  "url": "https://github.com/octocat/Hello-World/pull/123#pullrequestreview-123456",
+                  "createdAt": "2024-01-15T14:30:00Z",
+                  "updatedAt": "2024-01-15T14:30:00Z",
+                  "publishedAt": "2024-01-15T14:30:00Z",
+                  "submittedAt": "2024-01-15T14:30:00Z",
+                  "lastEditedAt": null,
+                  "state": "CHANGES_REQUESTED",
+                  "body": "Good work overall, but there are some security concerns that need to be addressed.",
+                  "repository": {
+                    "name": "Hello-World",
+                    "owner": {
+                      "login": "octocat"
+                    }
+                  },
+                  "pullRequest": {
+                    "id": "PR_kwDOAB12345",
+                    "url": "https://github.com/octocat/Hello-World/pull/123"
+                  },
+                  "comments": {
+                    "totalCount": 2,
+                    "nodes": [
+                      {
+                        "id": "PRRC_kwDOAB12345",
+                        "url": "https://github.com/octocat/Hello-World/pull/123#discussion_r123456",
+                        "body": "Consider adding input validation here",
+                        "author": {
+                          "login": "reviewer1"
+                        }
+                      },
+                      {
+                        "id": "PRRC_kwDOAB12346",
+                        "url": "https://github.com/octocat/Hello-World/pull/123#discussion_r123457",
+                        "body": "This might be vulnerable to XSS attacks",
+                        "author": {
+                          "login": "reviewer1"
+                        }
+                      }
+                    ]
+                  }
+                }
+
+                data: {
+                  "id": "PRR_kwDOAB12346",
+                  "url": "https://github.com/octocat/Hello-World/pull/124#pullrequestreview-123458",
+                  "createdAt": "2024-01-15T16:45:00Z",
+                  "updatedAt": "2024-01-15T16:45:00Z",
+                  "publishedAt": "2024-01-15T16:45:00Z",
+                  "submittedAt": "2024-01-15T16:45:00Z",
+                  "lastEditedAt": null,
+                  "state": "APPROVED",
+                  "body": "Changes look good! The code is clean and well-tested.",
+                  "repository": {
+                    "name": "Hello-World",
+                    "owner": {
+                      "login": "octocat"
+                    }
+                  },
+                  "pullRequest": {
+                    "id": "PR_kwDOAB12346",
+                    "url": "https://github.com/octocat/Hello-World/pull/124"
+                  },
+                  "comments": {
+                    "totalCount": 1,
+                    "nodes": [
+                      {
+                        "id": "PRRC_kwDOAB12347",
+                        "url": "https://github.com/octocat/Hello-World/pull/124#discussion_r123458",
+                        "body": "Great error handling implementation!",
+                        "author": {
+                          "login": "reviewer2"
+                        }
+                      }
+                    ]
+                  }
+                }
