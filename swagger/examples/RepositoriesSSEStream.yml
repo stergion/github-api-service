@@ -1,0 +1,81 @@
+components:
+    examples:
+        RepositoriesSSEStream:
+            summary: Example SSE stream of Repositories
+            value: |
+                data: {
+                  "id": "MDEwOlJlcG9zaXRvcnkxMjM0NTY=",
+                  "name": "project-alpha",
+                  "url": "https://github.com/octocat/project-alpha",
+                  "owner": {
+                    "login": "octocat"
+                  },
+                  "stargazerCount": 1500,
+                  "forkCount": 250,
+                  "primaryLanguage": {
+                    "name": "TypeScript"
+                  },
+                  "languages": {
+                    "totalCount": 3,
+                    "totalSize": 45000,
+                    "edges": [
+                      {
+                        "size": 30000,
+                        "node": {
+                          "name": "TypeScript"
+                        }
+                      }
+                    ]
+                  },
+                  "labels": {
+                    "totalCount": 2,
+                    "nodes": [
+                      {
+                        "name": "bug",
+                        "description": "Something isn't working"
+                      }
+                    ]
+                  },
+                  "repositoryTopics": {
+                    "totalCount": 1,
+                    "nodes": [
+                      {
+                        "topic": {
+                          "name": "api"
+                        }
+                      }
+                    ]
+                  },
+                  "watchers": {
+                    "totalCount": 75
+                  }
+                }
+
+                data: {
+                  "id": "MDEwOlJlcG9zaXRvcnk5ODc2NTQ=",
+                  "name": "project-beta",
+                  "url": "https://github.com/octocat/project-beta", 
+                  "owner": {
+                    "login": "octocat"
+                  },
+                  "stargazerCount": 800,
+                  "forkCount": 120,
+                  "primaryLanguage": {
+                    "name": "JavaScript"
+                  },
+                  "languages": {
+                    "totalCount": 2,
+                    "totalSize": 25000,
+                    "edges": [
+                      {
+                        "size": 20000,
+                        "node": {
+                          "name": "JavaScript"
+                        }
+                      }
+                    ]
+                  },
+                  "watchers": {
+                    "totalCount": 45
+                  }
+                }
