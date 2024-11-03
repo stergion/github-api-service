@@ -101,6 +101,48 @@ router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
     res.end();
 });
 
+/**
+ * @swagger
+ * /api/user/{login}/contributions/issues/from/{fromDate}/to/{toDate}:
+ *   get:
+ *     summary: Get issues created by the user within a date range
+ *     description: Returns a stream of issues that the user has created
+ *     parameters:
+ *       - name: login
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: GitHub username
+ *       - name: fromDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date for issues range
+ *       - name: toDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date for issues range
+ *     responses:
+ *       200:
+ *         description: Stream of issues
+ *         content:
+ *           text/event-stream:
+ *             examples:
+ *               IssueSSEStream:
+ *                 $ref: '#/components/examples/IssuesSSEStream'
+ *             schema:
+ *               type: object
+ *               description: Event stream where each event contains an issue object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/Issue'
+ */
 router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, fromDate, toDate } = req.params as typeof req.params & {

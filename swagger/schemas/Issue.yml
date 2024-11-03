@@ -1,0 +1,96 @@
+openapi: 3.0.0
+components:
+    schemas:
+        Issue:
+            type: object
+            required:
+                - id
+                - url
+                - createdAt
+                - updatedAt
+                - state
+                - title
+                - body
+                - repository
+                - reactions
+                - comments
+            properties:
+                id:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                closedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                state:
+                    type: string
+                    enum: [OPEN, CLOSED]
+                title:
+                    type: string
+                body:
+                    type: string
+                repository:
+                    type: object
+                    required:
+                        - owner
+                        - name
+                    properties:
+                        owner:
+                            type: object
+                            required:
+                                - login
+                            properties:
+                                login:
+                                    type: string
+                        name:
+                            type: string
+                timelineItems:
+                    type: object
+                    properties:
+                        nodes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    actor:
+                                        type: object
+                                        properties:
+                                            login:
+                                                type: string
+                reactions:
+                    type: object
+                    required:
+                        - totalCount
+                    properties:
+                        totalCount:
+                            type: integer
+                labels:
+                    type: object
+                    properties:
+                        totalCount:
+                            type: integer
+                        nodes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    name:
+                                        type: string
+                                    description:
+                                        type: string
+                                        nullable: true
+                comments:
+                    type: object
+                    required:
+                        - totalCount
+                    properties:
+                        totalCount:
+                            type: integer
