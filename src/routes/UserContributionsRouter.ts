@@ -21,7 +21,60 @@ export { router as UserContributionsRouter };
 
 const router = express.Router({ mergeParams: true });
 
-// Get commits from repository
+/**
+ * @swagger
+ * /api/user/{login}/contributions/commits/{owner}/{name}/from/{fromDate}/to/{toDate}:
+ *   get:
+ *     summary: Get user's commits to a specific repository within a date range
+ *     description: Returns a stream of commits that the user has made to the specified repository
+ *     parameters:
+ *       - name: login
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: GitHub username
+ *       - name: owner
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Repository owner's username
+ *       - name: name
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Repository name
+ *       - name: fromDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date for commits range
+ *       - name: toDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date for commits range
+ *     responses:
+ *       200:
+ *         description: Stream of commits
+ *         content:
+ *           text/event-stream:
+ *             examples:
+ *               CommitSSEStream:
+ *                 $ref: '#/components/examples/CommitsSSEStream'
+ *             schema:
+ *               type: object
+ *               description: Event stream where each event contains a commit object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/CommitWithFiles'
+ */
 router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, owner, name } = req.params as typeof req.params & {

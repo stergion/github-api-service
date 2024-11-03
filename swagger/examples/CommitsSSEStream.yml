@@ -1,0 +1,101 @@
+components:
+    examples:
+        CommitsSSEStream:
+            summary: Example SSE stream of commits
+            value: |
+                data: {
+                  "id": "C_kwDOAB12345",
+                  "oid": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+                  "commitUrl": "https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+                  "committedDate": "2024-01-15T14:30:00Z",
+                  "pushedDate": "2024-01-15T14:35:00Z",
+                  "changedFiles": 2,
+                  "additions": 150,
+                  "deletions": 30,
+                  "message": "feat: implement authentication system\n\n- Add JWT token support\n- Implement user validation\n- Add tests",
+                  "comments": {
+                    "nodes": [
+                      {
+                        "publishedAt": "2024-01-15T15:00:00Z",
+                        "position": 42,
+                        "body": "Consider adding rate limiting here",
+                        "author": {
+                          "login": "reviewer1"
+                        },
+                        "reactions": {
+                          "totalCount": 3
+                        }
+                      }
+                    ]
+                  },
+                  "associatedPullRequests": {
+                    "nodes": [
+                      {
+                        "id": "PR_kwDOAB12345",
+                        "url": "https://github.com/octocat/Hello-World/pull/123"
+                      }
+                    ]
+                  },
+                  "files": [
+                    {
+                      "filename": "src/auth.ts",
+                      "additions": 120,
+                      "deletions": 20,
+                      "changes": 140,
+                      "status": "modified",
+                      "raw_url": "https://github.com/octocat/Hello-World/raw/6dcb09b5/src/auth.ts",
+                      "blob_url": "https://github.com/octocat/Hello-World/blob/6dcb09b5/src/auth.ts",
+                      "sha": "a84d88e7554fc1fa21bcbc4efae3c782a70d2b9d",
+                      "contents_url": "https://api.github.com/repos/octocat/Hello-World/contents/src/auth.ts?ref=6dcb09b5",
+                      "patch": "@@ -132,7 +132,7 @@ export class AuthService"
+                    },
+                    {
+                      "filename": "tests/auth.test.ts",
+                      "additions": 30,
+                      "deletions": 10,
+                      "changes": 40,
+                      "status": "modified",
+                      "raw_url": "https://github.com/octocat/Hello-World/raw/6dcb09b5/tests/auth.test.ts",
+                      "blob_url": "https://github.com/octocat/Hello-World/blob/6dcb09b5/tests/auth.test.ts",
+                      "sha": "b84d88e7554fc1fa21bcbc4efae3c782a70d2b9e",
+                      "contents_url": "https://api.github.com/repos/octocat/Hello-World/contents/tests/auth.test.ts?ref=6dcb09b5"
+                    }
+                  ]
+                }
+
+                data: {
+                  "id": "C_kwDOAB12346",
+                  "oid": "7dcb09b5b57875f334f61aebed695e2e4193db5f",
+                  "commitUrl": "https://github.com/octocat/Hello-World/commit/7dcb09b5b57875f334f61aebed695e2e4193db5f",
+                  "committedDate": "2024-01-15T16:30:00Z",
+                  "pushedDate": "2024-01-15T16:35:00Z",
+                  "changedFiles": 1,
+                  "additions": 15,
+                  "deletions": 5,
+                  "message": "fix: resolve memory leak in worker pool",
+                  "comments": {
+                    "nodes": []
+                  },
+                  "associatedPullRequests": {
+                    "nodes": [
+                      {
+                        "id": "PR_kwDOAB12346",
+                        "url": "https://github.com/octocat/Hello-World/pull/124"
+                      }
+                    ]
+                  },
+                  "files": [
+                    {
+                      "filename": "src/worker.ts",
+                      "additions": 15,
+                      "deletions": 5,
+                      "changes": 20,
+                      "status": "modified",
+                      "raw_url": "https://github.com/octocat/Hello-World/raw/7dcb09b5/src/worker.ts",
+                      "blob_url": "https://github.com/octocat/Hello-World/blob/7dcb09b5/src/worker.ts",
+                      "sha": "c84d88e7554fc1fa21bcbc4efae3c782a70d2b9f",
+                      "contents_url": "https://api.github.com/repos/octocat/Hello-World/contents/src/worker.ts?ref=7dcb09b5",
+                      "patch": "@@ -45,7 +45,7 @@ export class WorkerPool"
+                    }
+                  ]
+                }

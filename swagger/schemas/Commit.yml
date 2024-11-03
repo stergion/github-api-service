@@ -1,0 +1,164 @@
+components:
+    schemas:
+        CommitWithFiles:
+            type: object
+            required:
+                - id
+                - oid
+                - commitUrl
+                - committedDate
+                - changedFiles
+                - additions
+                - deletions
+                - message
+                - comments
+            properties:
+                id:
+                    type: string
+                oid:
+                    type: string
+                commitUrl:
+                    type: string
+                    format: uri
+                committedDate:
+                    type: string
+                    format: date-time
+                pushedDate:
+                    type: string
+                    format: date-time
+                    nullable: true
+                changedFiles:
+                    type: integer
+                additions:
+                    type: integer
+                deletions:
+                    type: integer
+                message:
+                    type: string
+                comments:
+                    type: object
+                    required:
+                        - nodes
+                    properties:
+                        nodes:
+                            type: array
+                            nullable: true
+                            items:
+                                type: object
+                                nullable: true
+                                properties:
+                                    publishedAt:
+                                        type: string
+                                        format: date-time
+                                        nullable: true
+                                    position:
+                                        type: integer
+                                        nullable: true
+                                    body:
+                                        type: string
+                                    author:
+                                        oneOf:
+                                            - type: object
+                                              properties:
+                                                  login:
+                                                      type: string
+                                        nullable: true
+                                    reactions:
+                                        type: object
+                                        required:
+                                            - totalCount
+                                        properties:
+                                            totalCount:
+                                                type: integer
+                associatedPullRequests:
+                    type: object
+                    nullable: true
+                    properties:
+                        nodes:
+                            type: array
+                            nullable: true
+                            items:
+                                type: object
+                                nullable: true
+                                required:
+                                    - id
+                                    - url
+                                properties:
+                                    id:
+                                        type: string
+                                    url:
+                                        type: string
+                                        format: uri
+                files:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            $ref: "#/components/schemas/CommitFile"
+        CommitFile:
+            type: object
+            required:
+                - filename
+                - additions
+                - deletions
+                - changes
+                - status
+                - raw_url
+                - blob_url
+                - sha
+                - contents_url
+            properties:
+                filename:
+                    type: string
+                    description: Name of the file
+                    example: "file1.txt"
+                additions:
+                    type: integer
+                    description: Number of lines added
+                    minimum: 0
+                    example: 10
+                deletions:
+                    type: integer
+                    description: Number of lines deleted
+                    minimum: 0
+                    example: 5
+                changes:
+                    type: integer
+                    description: Total number of changes
+                    minimum: 0
+                    example: 15
+                status:
+                    type: string
+                    enum: [added, removed, modified, renamed, copied, changed, unchanged]
+                    description: Git status of the file
+                    example: "modified"
+                raw_url:
+                    type: string
+                    format: uri
+                    description: Raw file content URL
+                    example: "https://github.com/octocat/Hello-World/raw/6dcb09b5b57875f334f61aebed695e2e4193db5e/file1.txt"
+                blob_url:
+                    type: string
+                    format: uri
+                    description: GitHub blob URL
+                    example: "https://github.com/octocat/Hello-World/blob/6dcb09b5b57875f334f61aebed695e2e4193db5e/file1.txt"
+                patch:
+                    type: string
+                    description: Unified diff patch string
+                    example: "@@ -132,7 +132,7 @@ module Test @@ -1000,7 +1000,7 @@ module Test"
+                    nullable: true
+                previous_filename:
+                    type: string
+                    description: Previous filename if file was renamed
+                    example: file.txt
+                    nullable: true
+                sha:
+                    type: string
+                    description: SHA-1 hash of the file
+                    pattern: "^[0-9a-f]{40}$"
+                    example: "a84d88e7554fc1fa21bcbc4efae3c782a70d2b9d"
+                contents_url:
+                    type: string
+                    format: uri
+                    description: GitHub API URL for file contents
+                    example: "https://api.github.com/repos/octocat/Hello-World/contents/file1.txt?ref=6dcb09b5b57875f334f61aebed695e2e4193db5e"
