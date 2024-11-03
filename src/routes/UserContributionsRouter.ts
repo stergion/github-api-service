@@ -167,6 +167,48 @@ router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
     res.end();
 });
 
+/**
+ * @swagger
+ * /api/user/{login}/contributions/pullrequests/from/{fromDate}/to/{toDate}:
+ *   get:
+ *     summary: Get pull requests created by the user within a date range
+ *     description: Returns a stream of pull requests that the user has created
+ *     parameters:
+ *       - name: login
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: GitHub username
+ *       - name: fromDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date for pull requests range
+ *       - name: toDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date for pull requests range
+ *     responses:
+ *       200:
+ *         description: Stream of pull requests
+ *         content:
+ *           text/event-stream:
+ *             examples:
+ *               PullRequestSSEStream:
+ *                 $ref: '#/components/examples/PullRequestsSSEStream'
+ *             schema:
+ *               type: object
+ *               description: Event stream where each event contains a pull request object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/PullRequest'
+ */
 router.get("/pullrequests/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login, fromDate, toDate } = req.params as typeof req.params & {

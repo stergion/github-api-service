@@ -1,0 +1,114 @@
+components:
+    examples:
+        PullRequestsSSEStream:
+            summary: Example SSE stream of pull requests
+            value: |
+                data: {
+                  "id": "PR_kwDOAB12345",
+                  "url": "https://github.com/octocat/Hello-World/pull/123",
+                  "createdAt": "2024-01-15T14:30:00Z",
+                  "updatedAt": "2024-01-15T16:45:00Z",
+                  "mergedAt": null,
+                  "closedAt": null,
+                  "state": "OPEN",
+                  "title": "feat: Add authentication system",
+                  "body": "This PR implements JWT-based authentication:\n\n- Add token generation\n- Implement user validation\n- Add middleware\n- Include tests",
+                  "repository": {
+                    "name": "Hello-World",
+                    "owner": {
+                      "login": "octocat"
+                    }
+                  },
+                  "reactions": {
+                    "totalCount": 5
+                  },
+                  "labels": {
+                    "totalCount": 2,
+                    "nodes": [
+                      {
+                        "name": "enhancement",
+                        "description": "New feature or request"
+                      },
+                      {
+                        "name": "in-review",
+                        "description": "Currently under review"
+                      }
+                    ]
+                  },
+                  "commits": {
+                    "totalCount": 3,
+                    "nodes": [
+                      {
+                        "commit": {
+                          "oid": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+                          "message": "feat: initial auth implementation"
+                        }
+                      }
+                    ]
+                  },
+                  "comments": {
+                    "totalCount": 4
+                  },
+                  "closingIssuesReferences": {
+                    "totalCount": 1,
+                    "nodes": [
+                      {
+                        "id": "I_kwDOAB12345",
+                        "url": "https://github.com/octocat/Hello-World/issues/120"
+                      }
+                    ]
+                  }
+                }
+
+                data: {
+                  "id": "PR_kwDOAB12346",
+                  "url": "https://github.com/octocat/Hello-World/pull/124",
+                  "createdAt": "2024-01-10T09:00:00Z",
+                  "updatedAt": "2024-01-15T15:30:00Z",
+                  "mergedAt": "2024-01-15T15:30:00Z",
+                  "closedAt": "2024-01-15T15:30:00Z",
+                  "state": "MERGED",
+                  "title": "fix: Resolve memory leak in worker pool",
+                  "body": "This PR fixes the memory leak issue by properly cleaning up worker resources",
+                  "repository": {
+                    "name": "Hello-World",
+                    "owner": {
+                      "login": "octocat"
+                    }
+                  },
+                  "reactions": {
+                    "totalCount": 3
+                  },
+                  "labels": {
+                    "totalCount": 1,
+                    "nodes": [
+                      {
+                        "name": "bug",
+                        "description": "Something isn't working"
+                      }
+                    ]
+                  },
+                  "commits": {
+                    "totalCount": 1,
+                    "nodes": [
+                      {
+                        "commit": {
+                          "oid": "7dcb09b5b57875f334f61aebed695e2e4193db5f",
+                          "message": "fix: clean up worker resources"
+                        }
+                      }
+                    ]
+                  },
+                  "comments": {
+                    "totalCount": 2
+                  },
+                  "closingIssuesReferences": {
+                    "totalCount": 1,
+                    "nodes": [
+                      {
+                        "id": "I_kwDOAB12346",
+                        "url": "https://github.com/octocat/Hello-World/issues/122"
+                      }
+                    ]
+                  }
+                }

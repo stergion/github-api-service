@@ -1,0 +1,119 @@
+components:
+    schemas:
+        PullRequest:
+            type: object
+            required:
+                - id
+                - url
+                - createdAt
+                - updatedAt
+                - state
+                - title
+                - body
+                - repository
+                - reactions
+                - commits
+                - comments
+            properties:
+                id:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                createdAt:
+                    type: string
+                    format: date-time
+                mergedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                closedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                updatedAt:
+                    type: string
+                    format: date-time
+                state:
+                    type: string
+                    enum: [OPEN, CLOSED, MERGED]
+                title:
+                    type: string
+                body:
+                    type: string
+                repository:
+                    type: object
+                    required:
+                        - name
+                        - owner
+                    properties:
+                        name:
+                            type: string
+                        owner:
+                            type: object
+                            required:
+                                - login
+                            properties:
+                                login:
+                                    type: string
+                reactions:
+                    type: object
+                    required:
+                        - totalCount
+                    properties:
+                        totalCount:
+                            type: integer
+                labels:
+                    type: object
+                    properties:
+                        totalCount:
+                            type: integer
+                        nodes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    name:
+                                        type: string
+                                    description:
+                                        type: string
+                                        nullable: true
+                commits:
+                    type: object
+                    required:
+                        - totalCount
+                    properties:
+                        totalCount:
+                            type: integer
+                        nodes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    commit:
+                                        $ref: "#/components/schemas/CommitInfoLean"
+                comments:
+                    type: object
+                    required:
+                        - totalCount
+                    properties:
+                        totalCount:
+                            type: integer
+                closingIssuesReferences:
+                    type: object
+                    properties:
+                        totalCount:
+                            type: integer
+                        nodes:
+                            type: array
+                            items:
+                                type: object
+                                required:
+                                    - id
+                                    - url
+                                properties:
+                                    id:
+                                        type: string
+                                    url:
+                                        type: string
+                                        format: uri
