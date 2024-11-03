@@ -370,6 +370,48 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
     res.end();
 });
 
+/**
+ * @swagger
+ * /api/user/{login}/contributions/commit-comments/from/{fromDate}/to/{toDate}:
+ *   get:
+ *     summary: Get user's commit comments within a date range
+ *     description: Returns a stream of comments that the user has made on commits
+ *     parameters:
+ *       - name: login
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: GitHub username
+ *       - name: fromDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date for commit comments range
+ *       - name: toDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date for commit comments range
+ *     responses:
+ *       200:
+ *         description: Stream of commit comments
+ *         content:
+ *           text/event-stream:
+ *             examples:
+ *               CommitCommentSSEStream:
+ *                 $ref: '#/components/examples/CommitCommentsSSEStream'
+ *             schema:
+ *               type: object
+ *               description: Event stream where each event contains a commit comment object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/CommitComment'
+ */
 router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login } = req.params as typeof req.params & { login: string };

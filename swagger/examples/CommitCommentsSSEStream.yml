@@ -1,0 +1,52 @@
+components:
+    examples:
+        CommitCommentSSEStream:
+            summary: Example SSE stream of commit comments
+            value: |
+                data: {
+                  "id": "CC_kwDOAB12345",
+                  "url": "https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e#commitcomment-123456",
+                  "createdAt": "2024-01-15T14:30:00Z",
+                  "updatedAt": "2024-01-15T14:30:00Z",
+                  "publishedAt": "2024-01-15T14:30:00Z",
+                  "lastEditedAt": null,
+                  "position": 42,
+                  "body": "Consider adding error handling here for network timeouts",
+                  "commit": {
+                    "id": "C_kwDOAB12345",
+                    "url": "https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e"
+                  },
+                  "repository": {
+                    "name": "Hello-World",
+                    "owner": {
+                      "login": "octocat"
+                    }
+                  },
+                  "reactions": {
+                    "totalCount": 3
+                  }
+                }
+
+                data: {
+                  "id": "CC_kwDOAB12346",
+                  "url": "https://github.com/octocat/Hello-World/commit/7dcb09b5b57875f334f61aebed695e2e4193db5f#commitcomment-123457",
+                  "createdAt": "2024-01-15T15:45:00Z",
+                  "updatedAt": "2024-01-15T16:00:00Z",
+                  "publishedAt": "2024-01-15T15:45:00Z",
+                  "lastEditedAt": "2024-01-15T16:00:00Z",
+                  "position": null,
+                  "body": "The performance optimization here looks good",
+                  "commit": {
+                    "id": "C_kwDOAB12346",
+                    "url": "https://github.com/octocat/Hello-World/commit/7dcb09b5b57875f334f61aebed695e2e4193db5f"
+                  },
+                  "repository": {
+                    "name": "Hello-World",
+                    "owner": {
+                      "login": "octocat"
+                    }
+                  },
+                  "reactions": {
+                    "totalCount": 5
+                  }
+                }

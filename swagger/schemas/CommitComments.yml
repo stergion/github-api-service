@@ -1,0 +1,60 @@
+components:
+    schemas:
+        CommitComment:
+            type: object
+            required:
+                - id
+                - url
+                - createdAt
+                - updatedAt
+                - body
+                - repository
+                - reactions
+            properties:
+                id:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                publishedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                lastEditedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                position:
+                    type: number
+                    nullable: true
+                body:
+                    type: string
+                commit:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        url:
+                            type: string
+                            format: uri
+                repository:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                        owner:
+                            type: object
+                            properties:
+                                login:
+                                    type: string
+                reactions:
+                    type: object
+                    properties:
+                        totalCount:
+                            type: number
