@@ -23,5 +23,5 @@ export async function fetchUserInfo(octokit: Octokit, login: string) {
         throw new NotGithubUser(login);
     }
 
-    return userInfo as UserInfo;
+    return userInfo.user as UserInfo;
 }

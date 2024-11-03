@@ -36,7 +36,7 @@ router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
 
     const commits = await fetchRepositoryCommits(
         octokit,
-        userInfo.user.id,
+        userInfo.id,
         owner,
         name,
         fromDate,

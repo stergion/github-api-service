@@ -22,12 +22,10 @@ export {
     PullRequest,
     PullRequestReview,
     Repository,
-    NonNullableUserInfoQuery as UserInfo,
+    UserInfo,
 };
 
-type NonNullableUserInfoQuery = Omit<UserInfoQuery, "user"> & {
-    user: NonNullable<UserInfoQuery["user"]>;
-};
+type UserInfo = NonNullable<UserInfoQuery["user"]>;
 
 type CommitFile = NonNullable<
     RestEndpointMethodTypes["repos"]["getCommit"]["response"]["data"]["files"]
