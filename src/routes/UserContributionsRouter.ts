@@ -309,6 +309,48 @@ router.get("/pullrequest-reviews/from/:fromDate/to/:toDate", async (req, res) =>
     res.end();
 });
 
+/**
+ * @swagger
+ * /api/user/{login}/contributions/issue-comments/from/{fromDate}/to/{toDate}:
+ *   get:
+ *     summary: Get user's issue comments within a date range
+ *     description: Returns a stream of issue comments that the user has made
+ *     parameters:
+ *       - name: login
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: GitHub username
+ *       - name: fromDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date for issue comments range
+ *       - name: toDate
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date for issue comments range
+ *     responses:
+ *       200:
+ *         description: Stream of issue comments
+ *         content:
+ *           text/event-stream:
+ *             examples:
+ *               IssueCommentSSEStream:
+ *                 $ref: '#/components/examples/IssueCommentsSSEStream'
+ *             schema:
+ *               type: object
+ *               description: Event stream where each event contains an issue comment object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/IssueComment'
+ */
 router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
     const { octokit } = req;
     const { login } = req.params as typeof req.params & { login: string };

@@ -1,0 +1,55 @@
+components:
+    examples:
+        IssueCommentsSSEStream:
+            summary: Example SSE stream of issue comments
+            value: |
+                data: {
+                  "id": "IC_kwDOAB12345",
+                  "url": "https://github.com/octocat/Hello-World/issues/123#issuecomment-123456",
+                  "createdAt": "2024-01-15T14:30:00Z",
+                  "updatedAt": "2024-01-15T14:30:00Z",
+                  "publishedAt": "2024-01-15T14:30:00Z",
+                  "lastEditedAt": null,
+                  "body": "I've reproduced this issue on Node.js 18.x. Here's the stack trace...",
+                  "repository": {
+                    "owner": {
+                      "login": "octocat"
+                    },
+                    "name": "Hello-World"
+                  },
+                  "issue": {
+                    "id": "I_kwDOAB12345",
+                    "url": "https://github.com/octocat/Hello-World/issues/123"
+                  },
+                  "pullRequest": null,
+                  "reactions": {
+                    "totalCount": 5
+                  }
+                }
+
+                data: {
+                  "id": "IC_kwDOAB12346",
+                  "url": "https://github.com/octocat/Hello-World/pull/456#discussion_r123457",
+                  "createdAt": "2024-01-15T15:45:00Z",
+                  "updatedAt": "2024-01-15T16:00:00Z",
+                  "publishedAt": "2024-01-15T15:45:00Z",
+                  "lastEditedAt": "2024-01-15T16:00:00Z",
+                  "body": "Could you add more test coverage for this edge case?",
+                  "repository": {
+                    "owner": {
+                      "login": "octocat"
+                    },
+                    "name": "Hello-World"
+                  },
+                  "issue": {
+                    "id": "I_kwDOAB12347",
+                    "url": "https://github.com/octocat/Hello-World/pull/456"
+                  },
+                  "pullRequest": {
+                    "id": "PR_kwDOAB12347",
+                    "url": "https://github.com/octocat/Hello-World/pull/456"
+                  },
+                  "reactions": {
+                    "totalCount": 2
+                  }
+                }

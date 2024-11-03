@@ -1,0 +1,77 @@
+components:
+    schemas:
+        IssueComment:
+            type: object
+            required:
+                - id
+                - url
+                - createdAt
+                - updatedAt
+                - body
+                - repository
+                - issue
+                - reactions
+            properties:
+                id:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                publishedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                lastEditedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                body:
+                    type: string
+                repository:
+                    type: object
+                    required:
+                        - owner
+                        - name
+                    properties:
+                        owner:
+                            type: object
+                            required:
+                                - login
+                            properties:
+                                login:
+                                    type: string
+                        name:
+                            type: string
+                issue:
+                    type: object
+                    required:
+                        - id
+                        - url
+                    properties:
+                        id:
+                            type: string
+                        url:
+                            type: string
+                            format: uri
+                pullRequest:
+                    type: object
+                    nullable: true
+                    properties:
+                        id:
+                            type: string
+                        url:
+                            type: string
+                            format: uri
+                reactions:
+                    type: object
+                    required:
+                        - totalCount
+                    properties:
+                        totalCount:
+                            type: integer
