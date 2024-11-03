@@ -1,0 +1,93 @@
+components:
+    schemas:
+        Repository:
+            type: object
+            required:
+                - id
+                - name
+                - url
+                - owner
+                - stargazerCount
+                - forkCount
+                - watchers
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                owner:
+                    type: object
+                    required:
+                        - login
+                    properties:
+                        login:
+                            type: string
+                stargazerCount:
+                    type: integer
+                forkCount:
+                    type: integer
+                primaryLanguage:
+                    type: object
+                    nullable: true
+                    properties:
+                        name:
+                            type: string
+                languages:
+                    type: object
+                    properties:
+                        totalCount:
+                            type: integer
+                        totalSize:
+                            type: integer
+                        edges:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    size:
+                                        type: integer
+                                    node:
+                                        type: object
+                                        properties:
+                                            name:
+                                                type: string
+                labels:
+                    type: object
+                    properties:
+                        totalCount:
+                            type: integer
+                        nodes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    name:
+                                        type: string
+                                    description:
+                                        type: string
+                                        nullable: true
+                repositoryTopics:
+                    type: object
+                    properties:
+                        totalCount:
+                            type: integer
+                        nodes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    topic:
+                                        type: object
+                                        properties:
+                                            name:
+                                                type: string
+                watchers:
+                    type: object
+                    required:
+                        - totalCount
+                    properties:
+                        totalCount:
+                            type: integer
