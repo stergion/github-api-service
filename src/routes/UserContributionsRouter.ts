@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 
 import { VariablesOf } from "@graphql-typed-document-node/core";
 import {
@@ -6,6 +6,7 @@ import {
     PullRequestReviewsDocument,
     PullRequestsDocument,
 } from "../graphql/typed_queries.js";
+import * as validator from "../middleware/express-validator.js";
 import {
     fetchCommitComments,
     fetchIssueComments,
@@ -20,6 +21,44 @@ import { sendQueryWindowedPaginated } from "./helpers/sendQueries.js";
 export { router as UserContributionsRouter };
 
 const router = express.Router({ mergeParams: true });
+
+type CommitRequestParams = {
+    login: string;
+    owner: string;
+    name: string;
+    fromDate: string;
+    toDate: string;
+};
+
+type IssueRequestParams = {
+    login: string;
+    fromDate: string;
+    toDate: string;
+};
+
+type PullRequestRequestParams = {
+    login: string;
+    fromDate: string;
+    toDate: string;
+};
+
+type PullRequestReviewsRequestParams = {
+    login: string;
+    fromDate: string;
+    toDate: string;
+};
+
+type IssueCommentsRequestParams = {
+    login: string;
+    fromDate: string;
+    toDate: string;
+};
+
+type CommitCommentsRequestParams = {
+    login: string;
+    fromDate: string;
+    toDate: string;
+};
 
 /**
  * @swagger
@@ -77,31 +116,42 @@ const router = express.Router({ mergeParams: true });
  *                 data:
  *                   $ref: '#/components/schemas/CommitWithFiles'
  */
-router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
-    const { octokit } = req;
-    const { login, owner, name } = req.params as typeof req.params & {
-        login: string;
-    };
-    const fromDate = new Date(req.params.fromDate);
-    const toDate = new Date(req.params.toDate);
+router.get(
+    "/commits/:owner/:name/:fromDate/:toDate",
+    [
+        validator.loginParamValidtor(),
+        validator.githubOwnerParamValidtor(),
+        validator.githubNameParamValidtor(),
+        validator.dateParamValidator("fromDate"),
+        validator.dateParamValidator("toDate"),
+    ],
+    validator.run(),
+    async (req: Request<CommitRequestParams>, res: Response) => {
+        const { octokit } = req;
+        const { login, owner, name } = req.params as typeof req.params & {
+            login: string;
+        };
+        const fromDate = new Date(req.params.fromDate);
+        const toDate = new Date(req.params.toDate);
 
-    const stream = new SSEStream(res);
+        const stream = new SSEStream(res);
 
-    const userInfo = await fetchUserInfo(octokit, login);
+        const userInfo = await fetchUserInfo(octokit, login);
 
-    const commits = await fetchRepositoryCommits(
-        octokit,
-        userInfo.id,
-        owner,
-        name,
-        fromDate,
-        toDate
-    );
+        const commits = await fetchRepositoryCommits(
+            octokit,
+            userInfo.id,
+            owner,
+            name,
+            fromDate,
+            toDate
+        );
 
-    await Promise.all(commits.map(stream.streamResponse.bind(stream)));
+        await Promise.all(commits.map(stream.streamResponse.bind(stream)));
 
-    res.end();
-});
+        res.end();
+    }
+);
 
 /**
  * @swagger
@@ -147,29 +197,38 @@ router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
  *                 data:
  *                   $ref: '#/components/schemas/Issue'
  */
-router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
-    const { octokit } = req;
-    const { login, fromDate, toDate } = req.params as typeof req.params & {
-        login: string;
-    };
+router.get(
+    "/issues/from/:fromDate/to/:toDate",
+    [
+        validator.loginParamValidtor(),
+        validator.dateParamValidator("fromDate"),
+        validator.dateParamValidator("toDate"),
+    ],
+    validator.run(),
+    async (req: Request<IssueRequestParams>, res: Response) => {
+        const { octokit } = req;
+        const { login, fromDate, toDate } = req.params as typeof req.params & {
+            login: string;
+        };
 
-    const stream = new SSEStream(res);
+        const stream = new SSEStream(res);
 
-    const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
+        const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
 
-    const issuesQueryVariables: VariablesOf<typeof IssuesDocument> = {
-        login: login,
-        // cursor: null,
-    };
+        const issuesQueryVariables: VariablesOf<typeof IssuesDocument> = {
+            login: login,
+            // cursor: null,
+        };
 
-    let result = dateWindows
-        .map(sendQueryWindowedPaginated(octokit, IssuesDocument, issuesQueryVariables))
-        .map(getQueryNodes)
-        .map(stream.streamResponse.bind(stream));
-    await Promise.all(result);
+        let result = dateWindows
+            .map(sendQueryWindowedPaginated(octokit, IssuesDocument, issuesQueryVariables))
+            .map(getQueryNodes)
+            .map(stream.streamResponse.bind(stream));
+        await Promise.all(result);
 
-    res.end();
-});
+        res.end();
+    }
+);
 
 /**
  * @swagger
@@ -215,31 +274,40 @@ router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
  *                 data:
  *                   $ref: '#/components/schemas/PullRequest'
  */
-router.get("/pullrequests/from/:fromDate/to/:toDate", async (req, res) => {
-    const { octokit } = req;
-    const { login, fromDate, toDate } = req.params as typeof req.params & {
-        login: string;
-    };
+router.get(
+    "/pullrequests/from/:fromDate/to/:toDate",
+    [
+        validator.loginParamValidtor(),
+        validator.dateParamValidator("fromDate"),
+        validator.dateParamValidator("toDate"),
+    ],
+    validator.run(),
+    async (req: Request<PullRequestRequestParams>, res: Response) => {
+        const { octokit } = req;
+        const { login, fromDate, toDate } = req.params as typeof req.params & {
+            login: string;
+        };
 
-    const stream = new SSEStream(res);
+        const stream = new SSEStream(res);
 
-    const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
+        const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
 
-    const pullRequestsVariables: VariablesOf<typeof PullRequestsDocument> = {
-        login: login,
-        fromDate: null,
-        toDate: null,
-        cursor: null,
-    };
+        const pullRequestsVariables: VariablesOf<typeof PullRequestsDocument> = {
+            login: login,
+            fromDate: null,
+            toDate: null,
+            cursor: null,
+        };
 
-    const result = dateWindows
-        .map(sendQueryWindowedPaginated(octokit, PullRequestsDocument, pullRequestsVariables))
-        .map(getQueryNodes)
-        .map(stream.streamResponse.bind(stream));
-    await Promise.all(result);
+        const result = dateWindows
+            .map(sendQueryWindowedPaginated(octokit, PullRequestsDocument, pullRequestsVariables))
+            .map(getQueryNodes)
+            .map(stream.streamResponse.bind(stream));
+        await Promise.all(result);
 
-    res.end();
-});
+        res.end();
+    }
+);
 
 /**
  * @swagger
@@ -285,37 +353,46 @@ router.get("/pullrequests/from/:fromDate/to/:toDate", async (req, res) => {
  *                 data:
  *                   $ref: '#/components/schemas/PullRequestReview'
  */
-router.get("/pullrequest-reviews/from/:fromDate/to/:toDate", async (req, res) => {
-    const { octokit } = req;
-    const { login, fromDate, toDate } = req.params as typeof req.params & {
-        login: string;
-    };
+router.get(
+    "/pullrequest-reviews/from/:fromDate/to/:toDate",
+    [
+        validator.loginParamValidtor(),
+        validator.dateParamValidator("fromDate"),
+        validator.dateParamValidator("toDate"),
+    ],
+    validator.run(),
+    async (req: Request<PullRequestReviewsRequestParams>, res: Response) => {
+        const { octokit } = req;
+        const { login, fromDate, toDate } = req.params as typeof req.params & {
+            login: string;
+        };
 
-    const stream = new SSEStream(res);
+        const stream = new SSEStream(res);
 
-    const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
+        const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
 
-    const pullrequestReviewsVariables: VariablesOf<typeof PullRequestReviewsDocument> = {
-        login: login,
-        fromDate: null,
-        toDate: null,
-        cursor: null,
-    };
+        const pullrequestReviewsVariables: VariablesOf<typeof PullRequestReviewsDocument> = {
+            login: login,
+            fromDate: null,
+            toDate: null,
+            cursor: null,
+        };
 
-    const result = dateWindows
-        .map(
-            sendQueryWindowedPaginated(
-                octokit,
-                PullRequestReviewsDocument,
-                pullrequestReviewsVariables
+        const result = dateWindows
+            .map(
+                sendQueryWindowedPaginated(
+                    octokit,
+                    PullRequestReviewsDocument,
+                    pullrequestReviewsVariables
+                )
             )
-        )
-        .map(getQueryNodes)
-        .map(stream.streamResponse.bind(stream));
-    await Promise.all(result);
+            .map(getQueryNodes)
+            .map(stream.streamResponse.bind(stream));
+        await Promise.all(result);
 
-    res.end();
-});
+        res.end();
+    }
+);
 
 /**
  * @swagger
@@ -361,24 +438,33 @@ router.get("/pullrequest-reviews/from/:fromDate/to/:toDate", async (req, res) =>
  *                 data:
  *                   $ref: '#/components/schemas/IssueComment'
  */
-router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
-    const { octokit } = req;
-    const { login } = req.params as typeof req.params & { login: string };
+router.get(
+    "/issue-comments/from/:fromDate/to/:toDate",
+    [
+        validator.loginParamValidtor(),
+        validator.dateParamValidator("fromDate"),
+        validator.dateParamValidator("toDate"),
+    ],
+    validator.run(),
+    async (req: Request<IssueCommentsRequestParams>, res: Response) => {
+        const { octokit } = req;
+        const { login } = req.params as typeof req.params & { login: string };
 
-    const stream = new SSEStream(res);
+        const stream = new SSEStream(res);
 
-    const fromDate = new Date(req.params.fromDate);
-    const toDate = new Date(req.params.toDate);
+        const fromDate = new Date(req.params.fromDate);
+        const toDate = new Date(req.params.toDate);
 
-    const promises = [];
-    const it = fetchIssueComments(octokit, login, fromDate, toDate);
-    for await (const comments of it) {
-        promises.push(stream.streamResponse(comments));
+        const promises = [];
+        const it = fetchIssueComments(octokit, login, fromDate, toDate);
+        for await (const comments of it) {
+            promises.push(stream.streamResponse(comments));
+        }
+        await Promise.all(promises);
+
+        res.end();
     }
-    await Promise.all(promises);
-
-    res.end();
-});
+);
 
 /**
  * @swagger
@@ -424,22 +510,31 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
  *                 data:
  *                   $ref: '#/components/schemas/CommitComment'
  */
-router.get("/commit-comments/from/:fromDate/to/:toDate", async (req, res) => {
-    const { octokit } = req;
-    const { login } = req.params as typeof req.params & { login: string };
+router.get(
+    "/commit-comments/from/:fromDate/to/:toDate",
+    [
+        validator.loginParamValidtor(),
+        validator.dateParamValidator("fromDate"),
+        validator.dateParamValidator("toDate"),
+    ],
+    validator.run(),
+    async (req: Request<CommitCommentsRequestParams>, res: Response) => {
+        const { octokit } = req;
+        const { login } = req.params as typeof req.params & { login: string };
 
-    const stream = new SSEStream(res);
+        const stream = new SSEStream(res);
 
-    const fromDate = new Date(req.params.fromDate);
-    const toDate = new Date(req.params.toDate);
+        const fromDate = new Date(req.params.fromDate);
+        const toDate = new Date(req.params.toDate);
 
-    const it = fetchCommitComments(octokit, login, fromDate, toDate);
+        const it = fetchCommitComments(octokit, login, fromDate, toDate);
 
-    const promises = [];
-    for await (const comments of it) {
-        promises.push(stream.streamResponse(comments));
+        const promises = [];
+        for await (const comments of it) {
+            promises.push(stream.streamResponse(comments));
+        }
+        await Promise.all(promises);
+
+        res.end();
     }
-    await Promise.all(promises);
-
-    res.end();
-});
+);
