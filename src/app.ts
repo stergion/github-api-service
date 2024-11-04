@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import express from "express";
+import express, { Request, Response } from "express";
 import swaggerJsdoc, { OAS3Options } from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
@@ -25,6 +25,10 @@ const options: OAS3Options = {
                 url: `http://localhost:${port}`,
             },
         ],
+        externalDocs: {
+            description: "api-docs.json",
+            url: "/api-docs.json",
+        },
         tags: [
             {
                 name: "User",
@@ -54,6 +58,9 @@ const app = express();
 // Middleware
 app.use(injectOctokit());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get("/api-docs.json", (req, res) => {
+    res.json(swaggerSpec).end();
+});
 
 // Routers
 app.use("/api/user", UserRouter);
