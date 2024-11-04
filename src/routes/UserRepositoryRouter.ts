@@ -16,6 +16,8 @@ const router = express.Router({ mergeParams: true });
  *   get:
  *     summary: Get repositories the user has contributed to within a date range
  *     description: Returns a stream of repositories that the user has contributed to through commits, issues, pull requests, and reviews
+ *     tags:
+ *       - User Repositories
  *     parameters:
  *       - name: login
  *         in: path
@@ -82,6 +84,8 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
  *   get:
  *     summary: Get repositories the user has committed to within a date range
  *     description: Returns a stream of repositories that the user has directly committed code to
+ *     tags:
+ *       - User Repositories
  *     parameters:
  *       - name: login
  *         in: path

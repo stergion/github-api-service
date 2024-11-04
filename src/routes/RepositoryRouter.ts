@@ -11,6 +11,8 @@ const router = express.Router();
  *   get:
  *     summary: Get repository information
  *     description: Returns detailed information about a specific GitHub repository
+ *     tags:
+ *       - Repository
  *     parameters:
  *       - name: owner
  *         in: path
@@ -34,7 +36,7 @@ const router = express.Router();
  */
 router.get("/:owner/:name", async (req, res) => {
     const { octokit } = req;
-    const { owner, name } = req.params
+    const { owner, name } = req.params;
 
     const repository = await fetchRepositoryInfo(octokit, owner, name);
 

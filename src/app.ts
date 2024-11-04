@@ -22,7 +22,25 @@ const options: OAS3Options = {
         },
         servers: [
             {
-                url: `http://localhost:${port}`, 
+                url: `http://localhost:${port}`,
+            },
+        ],
+        tags: [
+            {
+                name: "User",
+                description: "User operations",
+            },
+            {
+                name: "User Repositories",
+                description: "User Repositories operations",
+            },
+            {
+                name: "User Contributions",
+                description: "User Contributions operations",
+            },
+            {
+                name: "Repository",
+                description: "Repository operations",
             },
         ],
     },

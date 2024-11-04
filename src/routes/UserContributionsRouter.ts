@@ -27,6 +27,8 @@ const router = express.Router({ mergeParams: true });
  *   get:
  *     summary: Get user's commits to a specific repository within a date range
  *     description: Returns a stream of commits that the user has made to the specified repository
+ *     tags:
+ *       - User Contributions
  *     parameters:
  *       - name: login
  *         in: path
@@ -107,6 +109,8 @@ router.get("/commits/:owner/:name/:fromDate/:toDate", async (req, res) => {
  *   get:
  *     summary: Get issues created by the user within a date range
  *     description: Returns a stream of issues that the user has created
+ *     tags:
+ *       - User Contributions
  *     parameters:
  *       - name: login
  *         in: path
@@ -173,6 +177,8 @@ router.get("/issues/from/:fromDate/to/:toDate", async (req, res) => {
  *   get:
  *     summary: Get pull requests created by the user within a date range
  *     description: Returns a stream of pull requests that the user has created
+ *     tags:
+ *       - User Contributions
  *     parameters:
  *       - name: login
  *         in: path
@@ -241,6 +247,8 @@ router.get("/pullrequests/from/:fromDate/to/:toDate", async (req, res) => {
  *   get:
  *     summary: Get pull request reviews created by the user within a date range
  *     description: Returns a stream of pull request reviews that the user has created
+ *     tags:
+ *       - User Contributions
  *     parameters:
  *       - name: login
  *         in: path
@@ -315,6 +323,8 @@ router.get("/pullrequest-reviews/from/:fromDate/to/:toDate", async (req, res) =>
  *   get:
  *     summary: Get user's issue comments within a date range
  *     description: Returns a stream of issue comments that the user has made
+ *     tags:
+ *       - User Contributions
  *     parameters:
  *       - name: login
  *         in: path
@@ -376,6 +386,8 @@ router.get("/issue-comments/from/:fromDate/to/:toDate", async (req, res) => {
  *   get:
  *     summary: Get user's commit comments within a date range
  *     description: Returns a stream of comments that the user has made on commits
+ *     tags:
+ *       - User Contributions
  *     parameters:
  *       - name: login
  *         in: path

@@ -11,6 +11,8 @@ const router = express.Router({ mergeParams: true });
  * /api/user/{login}:
  *   get:
  *     summary: Get user information
+ *     tags:
+ *       - User
  *     parameters:
  *       - name: login
  *         in: path
