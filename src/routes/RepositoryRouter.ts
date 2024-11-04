@@ -1,9 +1,17 @@
-import express from "express";
+import express, { Request, Response } from "express";
+
 import { fetchRepositoryInfo } from "../service/RepositoryService.js";
+import * as validator from "../middleware/express-validator.js";
+import { Repository } from "../graphql/dto_types.js";
 
 export { router as RepositoryRouter };
 
 const router = express.Router();
+
+type RepositoryRequestParams = {
+    owner: string;
+    name: string;
+};
 
 /**
  * @swagger
@@ -34,11 +42,16 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Repository'
  */
-router.get("/:owner/:name", async (req, res) => {
-    const { octokit } = req;
-    const { owner, name } = req.params;
+router.get(
+    "/:owner/:name",
+    [validator.githubOwnerParamValidtor(), validator.githubNameParamValidtor()],
+    validator.run(),
+    async (req: Request<RepositoryRequestParams>, res: Response<Repository>) => {
+        const { octokit } = req;
+        const { owner, name } = req.params;
 
-    const repository = await fetchRepositoryInfo(octokit, owner, name);
+        const repository = await fetchRepositoryInfo(octokit, owner, name);
 
-    res.json(repository).end();
-});
+        res.json(repository).end();
+    }
+);
