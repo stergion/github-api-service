@@ -1,5 +1,7 @@
-import express from 'express';
+import express from "express";
 
+import { UserInfo } from "../graphql/dto_types.js";
+import * as validator from "../middleware/express-validator.js";
 import { fetchUserInfo } from "../service/UserService.js";
 
 export { router as UserRouter };
@@ -27,11 +29,18 @@ const router = express.Router({ mergeParams: true });
  *             schema:
  *               $ref: '#/components/schemas/UserInfo'
  */
-router.get("/:login", async (req, res) => {
-    const { octokit, params: { login } } = req;
+router.get(
+    "/:login",
+    validator.loginParamValidtor(),
+    validator.run(),
+    async (req: express.Request<{ login: string }>, res: express.Response<UserInfo>) => {
+        const {
+            octokit,
+            params: { login },
+        } = req;
 
-    const userInfo = await fetchUserInfo(octokit, login);
+        const userInfo = await fetchUserInfo(octokit, login!);
 
-    res.json(userInfo).end();
-});
-
+        res.json(userInfo).end();
+    }
+);
