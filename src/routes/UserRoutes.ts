@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 
 import { UserInfo } from "../graphql/dto_types.js";
 import * as validator from "../middleware/express-validator.js";
@@ -33,7 +33,7 @@ router.get(
     "/:login",
     validator.loginParamValidtor(),
     validator.run(),
-    async (req: express.Request<{ login: string }>, res: express.Response<UserInfo>) => {
+    async (req: Request<{ login: string }>, res: Response<UserInfo>) => {
         const {
             octokit,
             params: { login },
