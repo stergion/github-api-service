@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request } from "express";
 
 import {
     fetchRepositoriesCommitedToInfo,
@@ -9,6 +9,18 @@ import { SSEStream } from "../utils/SSEStream.js";
 export { router as UserRepositoryRouter };
 
 const router = express.Router({ mergeParams: true });
+
+type RepositoriesContributedToRequest = {
+    login: string;
+    fromDate: string;
+    toDate: string;
+};
+
+type RepositoriesCommitedToRequest = {
+    login: string;
+    fromDate: string;
+    toDate: string;
+};
 
 /**
  * @swagger
@@ -54,29 +66,30 @@ const router = express.Router({ mergeParams: true });
  *                  data:
  *                      $ref: '#/components/schemas/Repository'
  */
-router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
-    const { octokit } = req;
-    const { login, fromDate, toDate } = req.params as typeof req.params & {
-        login: string;
-    };
+router.get(
+    "/contributed-to/from/:fromDate/to/:toDate",
+    async (req: Request<RepositoriesContributedToRequest>, res) => {
+        const { octokit } = req;
+        const { login, fromDate, toDate } = req.params;
 
-    const stream = new SSEStream(res);
+        const stream = new SSEStream(res);
 
-    const it = fetchRepositoriesContributedToInfo(
-        octokit,
-        login,
-        new Date(fromDate),
-        new Date(toDate)
-    );
+        const it = fetchRepositoriesContributedToInfo(
+            octokit,
+            login,
+            new Date(fromDate),
+            new Date(toDate)
+        );
 
-    const promises = [];
-    for await (const repository of it) {
-        promises.push(stream.streamResponse(repository));
+        const promises = [];
+        for await (const repository of it) {
+            promises.push(stream.streamResponse(repository));
+        }
+        await Promise.all(promises);
+
+        res.end();
     }
-    await Promise.all(promises);
-
-    res.end();
-});
+);
 
 /**
  * @swagger
@@ -122,26 +135,29 @@ router.get("/contributed-to/from/:fromDate/to/:toDate", async (req, res) => {
  *                  data:
  *                      $ref: '#/components/schemas/Repository'
  */
-router.get("/repositories/commited-to/from/:fromDate/to/:toDate", async (req, res) => {
-    const { octokit } = req;
-    const { login, fromDate, toDate } = req.params as typeof req.params & {
-        login: string;
-    };
+router.get(
+    "/repositories/commited-to/from/:fromDate/to/:toDate",
+    async (req: Request<RepositoriesCommitedToRequest>, res) => {
+        const { octokit } = req;
+        const { login, fromDate, toDate } = req.params as typeof req.params & {
+            login: string;
+        };
 
-    const stream = new SSEStream(res);
+        const stream = new SSEStream(res);
 
-    const it = fetchRepositoriesCommitedToInfo(
-        octokit,
-        login,
-        new Date(fromDate),
-        new Date(toDate)
-    );
+        const it = fetchRepositoriesCommitedToInfo(
+            octokit,
+            login,
+            new Date(fromDate),
+            new Date(toDate)
+        );
 
-    const promises = [];
-    for await (const repository of it) {
-        promises.push(stream.streamResponse(repository));
+        const promises = [];
+        for await (const repository of it) {
+            promises.push(stream.streamResponse(repository));
+        }
+        await Promise.all(promises);
+
+        res.end();
     }
-    await Promise.all(promises);
-
-    res.end();
-});
+);
