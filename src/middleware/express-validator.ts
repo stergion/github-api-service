@@ -1,18 +1,29 @@
 import { param, validationResult } from "express-validator";
 import express from "express";
 
-export function loginParamValidtor() {
-    return param("login")
+function GitHubNameParamValidator(name: string, alias: string) {
+    return param(name)
         .trim()
         .escape()
         .notEmpty()
-        .withMessage("GitHub username is required")
+        .withMessage(`GitHub ${alias} is required`)
         .isString()
-        .withMessage("GitHub username must be a string")
+        .withMessage(`GitHub ${alias} must be a string`)
         .isLength({ min: 1, max: 25 })
-        .withMessage("GitHub username is too long")
+        .withMessage(`GitHub ${alias} is too long`)
         .matches(/^[a-zA-Z0-9-]+$/)
-        .withMessage("GitHub username can only contain alphanumeric characters and hyphens");
+        .withMessage(`GitHub ${alias} can only contain alphanumeric characters and hyphens`);
+}
+export function loginParamValidtor() {
+    return GitHubNameParamValidator("login", "username");
+}
+
+export function githubOwnerParamValidtor() {
+    return GitHubNameParamValidator("owner", "repository owner");
+}
+
+export function githubNameParamValidtor() {
+    return GitHubNameParamValidator("name", "repository name");
 }
 
 export function dateParamValidator(on: "fromDate" | "toDate") {
