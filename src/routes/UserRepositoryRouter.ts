@@ -1,9 +1,10 @@
-import express, { Request } from "express";
+import express, { Request, Response } from "express";
 
 import {
     fetchRepositoriesCommitedToInfo,
     fetchRepositoriesContributedToInfo,
 } from "../service/RepositoryService.js";
+import * as validator from "../middleware/express-validator.js";
 import { SSEStream } from "../utils/SSEStream.js";
 
 export { router as UserRepositoryRouter };
@@ -68,7 +69,13 @@ type RepositoriesCommitedToRequest = {
  */
 router.get(
     "/contributed-to/from/:fromDate/to/:toDate",
-    async (req: Request<RepositoriesContributedToRequest>, res) => {
+    [
+        validator.loginParamValidtor(),
+        validator.dateParamValidator("fromDate"),
+        validator.dateParamValidator("toDate"),
+    ],
+    validator.run(),
+    async (req: Request<RepositoriesContributedToRequest>, res: Response) => {
         const { octokit } = req;
         const { login, fromDate, toDate } = req.params;
 
@@ -137,7 +144,13 @@ router.get(
  */
 router.get(
     "/repositories/commited-to/from/:fromDate/to/:toDate",
-    async (req: Request<RepositoriesCommitedToRequest>, res) => {
+    [
+        validator.loginParamValidtor(),
+        validator.dateParamValidator("fromDate"),
+        validator.dateParamValidator("toDate"),
+    ],
+    validator.run(),
+    async (req: Request<RepositoriesCommitedToRequest>, res: Response) => {
         const { octokit } = req;
         const { login, fromDate, toDate } = req.params as typeof req.params & {
             login: string;
