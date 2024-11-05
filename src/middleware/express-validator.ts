@@ -1,5 +1,6 @@
 import { param, validationResult } from "express-validator";
 import express from "express";
+import { RequestParamsValidationError } from "../utils/errors/ValidationError.js";
 
 function GitHubNameParamValidator(name: string, alias: string) {
     return param(name)
@@ -43,6 +44,6 @@ export function run() {
         if (result.isEmpty()) {
             return next();
         }
-        res.status(400).json({ errors: result.array() }).end();
+        throw new RequestParamsValidationError(result.array());
     };
 }

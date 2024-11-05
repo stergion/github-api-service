@@ -9,6 +9,7 @@ import { RepositoryRouter } from "./routes/RepositoryRouter.js";
 import { UserContributionsRouter } from "./routes/UserContributionsRouter.js";
 import { UserRepositoryRouter } from "./routes/UserRepositoryRouter.js";
 import { UserRouter } from "./routes/UserRoutes.js";
+import { errorResponseHandler, fallbackErrorHandler, notFoundHandler } from "./middleware/ErrorHandling.js";
 
 const port = process.env["PORT"] ?? 5000;
 
@@ -67,6 +68,11 @@ app.use("/api/user", UserRouter);
 app.use("/api/user/:login/repositories", UserRepositoryRouter);
 app.use("/api/user/:login/contributions", UserContributionsRouter);
 app.use("/api/repository", RepositoryRouter);
+
+// Error handling
+app.use(notFoundHandler);
+app.use(errorResponseHandler);
+app.use(fallbackErrorHandler);
 
 // Start
 app.listen(port, () => {
