@@ -60,13 +60,39 @@ type RepositoriesCommittedToRequest = {
  *           text/event-stream:
  *             examples:
  *               RepositorySSEStream:
- *                 $ref: '#/components/examples/RepositorySSEStream'
+ *                 $ref: '#/components/examples/RepositoriesSSEStream'
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a repository object
- *               properties:
- *                  data:
- *                      $ref: '#/components/schemas/Repository'
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['success']
+ *                     data:
+ *                       $ref: '#/components/schemas/Repository'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/RequestParamsValidationError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/NotGithubUserError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/contributed-to/from/:fromDate/to/:toDate",
@@ -139,13 +165,39 @@ router.get(
  *           text/event-stream:
  *             examples:
  *               RepositorySSEStream:
- *                 $ref: '#/components/examples/RepositorySSEStream'
+ *                 $ref: '#/components/examples/RepositoriesSSEStream'
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a repository object
- *               properties:
- *                  data:
- *                      $ref: '#/components/schemas/Repository'
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['success']
+ *                     data:
+ *                       $ref: '#/components/schemas/Repository'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/RequestParamsValidationError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/NotGithubUserError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/repositories/committed-to/from/:fromDate/to/:toDate",
