@@ -1,7 +1,7 @@
-[![TypeScript](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/stergion/github-api-service/main/package.json&query=$.devDependencies.typescript&label=TypeScript&color=blue)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/stergion/github-api-service/main/package.json&query=$.engines.node&label=Node.js&color=green)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/stergion/github-api-service/main/package.json&query=$.dependencies.express&label=Express&color=blue)](https://expressjs.com/)
-[![Octokit](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/stergion/github-api-service/main/package.json&query=$.devDependencies.typescript&label=octokit&color=blue)](https://octokit.github.io/rest.js/)
+[![TypeScript](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/stergion/github-api-service/refs/heads/main/package.json&query=$.devDependencies.typescript&label=TypeScript&color=blue)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/stergion/github-api-service/refs/heads/main/package.json&query=$.engines.node&label=Node.js&color=green)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/stergion/github-api-service/refs/heads/main/package.json&query=$.dependencies.express&label=Express&color=blue)](https://expressjs.com/)
+[![Octokit](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/stergion/github-api-service/refs/heads/main/package.json&query=$.devDependencies.typescript&label=octokit&color=blue)](https://octokit.github.io/rest.js/)
 [![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-brightgreen.svg)](https://swagger.io/)
 
 # GitHub Contributions API
