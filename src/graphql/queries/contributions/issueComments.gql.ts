@@ -1,6 +1,6 @@
 import { gql } from "graphql-tag";
 
-// Paginating backwords to fetch more recent comments first.
+// Paginating backwards to fetch more recent comments first.
 // Index 0 of the nodes array has the comment more back in time and
 // index -1 has the comment closer to now.
 export const issueComments = gql`

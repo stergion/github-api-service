@@ -31,7 +31,7 @@ const router = express.Router({ mergeParams: true });
  */
 router.get(
     "/:login",
-    validator.loginParamValidtor(),
+    validator.loginParamValidator(),
     validator.run(),
     async (req: Request<{ login: string }>, res: Response<UserInfo>) => {
         const {

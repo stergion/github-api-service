@@ -44,7 +44,7 @@ type RepositoryRequestParams = {
  */
 router.get(
     "/:owner/:name",
-    [validator.githubOwnerParamValidtor(), validator.githubNameParamValidtor()],
+    [validator.githubOwnerParamValidator(), validator.githubNameParamValidator()],
     validator.run(),
     async (req: Request<RepositoryRequestParams>, res: Response<Repository>) => {
         const { octokit } = req;

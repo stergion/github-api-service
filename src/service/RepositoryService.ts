@@ -3,8 +3,8 @@ import { Octokit } from "octokit";
 
 import { Repository } from "../graphql/dto_types.js";
 import {
-    RepositoriesCommitedToDocument,
-    RepositoriesCommitedToQueryVariables,
+    RepositoriesCommittedToDocument,
+    RepositoriesCommittedToQueryVariables,
     RepositoriesContributedToDocument,
     RepositoriesContributedToQueryVariables,
     RepositoryDocument,
@@ -58,7 +58,7 @@ const extractNameWithOwner = async (array: NameWithOwnerWrappedObject[]) => {
     return array.map((item) => item.repository.nameWithOwner);
 };
 
-export async function* fetchRepositoriesCommitedToInfo(
+export async function* fetchRepositoriesCommittedToInfo(
     octokit: Octokit,
     login: string,
     fromDate: Date,
@@ -66,25 +66,25 @@ export async function* fetchRepositoriesCommitedToInfo(
 ) {
     const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
 
-    const queryVariables: RepositoriesCommitedToQueryVariables = {
+    const queryVariables: RepositoriesCommittedToQueryVariables = {
         login: login,
     };
 
-    const sendQuerieFn = sendQueryWindowed(octokit, RepositoriesCommitedToDocument, queryVariables);
+    const sendQueryFn = sendQueryWindowed(octokit, RepositoriesCommittedToDocument, queryVariables);
 
-    const uniequeRepositories = new Set<string>();
+    const uniqueRepositories = new Set<string>();
 
     for (const dateWindow of dateWindows) {
-        const response = await sendQuerieFn(dateWindow);
+        const response = await sendQueryFn(dateWindow);
         const repositories = await extractRepositoriesFromQuery(response);
         const nameWithOwners = await extractNameWithOwner(repositories);
 
         for (const nameWithOwner of nameWithOwners) {
-            if (uniequeRepositories.has(nameWithOwner)) {
+            if (uniqueRepositories.has(nameWithOwner)) {
                 continue;
             }
 
-            uniequeRepositories.add(nameWithOwner);
+            uniqueRepositories.add(nameWithOwner);
 
             const [owner, name] = nameWithOwner.split("/") as [string, string];
             yield fetchRepositoryInfo(octokit, owner, name);
@@ -104,25 +104,25 @@ export async function* fetchRepositoriesContributedToInfo(
         login: login,
     };
 
-    const sendQuerieFn = sendQueryWindowed(
+    const sendQueryFn = sendQueryWindowed(
         octokit,
         RepositoriesContributedToDocument,
         queryVariables
     );
 
-    const uniequeRepositories = new Set<string>();
+    const uniqueRepositories = new Set<string>();
 
     for (const dateWindow of dateWindows) {
-        const response = await sendQuerieFn(dateWindow);
+        const response = await sendQueryFn(dateWindow);
         const repositories = await extractRepositoriesFromQuery(response);
         const nameWithOwners = await extractNameWithOwner(repositories);
 
         for (const nameWithOwner of nameWithOwners) {
-            if (uniequeRepositories.has(nameWithOwner)) {
+            if (uniqueRepositories.has(nameWithOwner)) {
                 continue;
             }
 
-            uniequeRepositories.add(nameWithOwner);
+            uniqueRepositories.add(nameWithOwner);
 
             const [owner, name] = nameWithOwner.split("/") as [string, string];
             yield fetchRepositoryInfo(octokit, owner, name);

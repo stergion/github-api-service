@@ -11,7 +11,7 @@ declare global {
 }
 
 /**
- * Injects validated Octokit object to exrpess request
+ * Injects validated Octokit object to express request
  */
 export function injectOctokit() {
     return async (req: Request, res: Response, next: NextFunction) => {

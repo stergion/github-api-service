@@ -21,10 +21,10 @@ export function fallbackErrorHandler(
     res: Response<JsonResponse>,
     next: NextFunction
 ) {
-    const errorRespomse = {
+    const errorResponse = {
         statusCode: 500,
         name: "Internal Server Error",
         message: "An unexpected error occurred",
     };
-    res.status(errorRespomse.statusCode).json(errorRespomse).end();
+    res.status(errorResponse.statusCode).json(errorResponse).end();
 }

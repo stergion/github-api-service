@@ -119,9 +119,9 @@ type CommitCommentsRequestParams = {
 router.get(
     "/commits/:owner/:name/:fromDate/:toDate",
     [
-        validator.loginParamValidtor(),
-        validator.githubOwnerParamValidtor(),
-        validator.githubNameParamValidtor(),
+        validator.loginParamValidator(),
+        validator.githubOwnerParamValidator(),
+        validator.githubNameParamValidator(),
         validator.dateParamValidator("fromDate"),
         validator.dateParamValidator("toDate"),
     ],
@@ -200,7 +200,7 @@ router.get(
 router.get(
     "/issues/from/:fromDate/to/:toDate",
     [
-        validator.loginParamValidtor(),
+        validator.loginParamValidator(),
         validator.dateParamValidator("fromDate"),
         validator.dateParamValidator("toDate"),
     ],
@@ -277,7 +277,7 @@ router.get(
 router.get(
     "/pullrequests/from/:fromDate/to/:toDate",
     [
-        validator.loginParamValidtor(),
+        validator.loginParamValidator(),
         validator.dateParamValidator("fromDate"),
         validator.dateParamValidator("toDate"),
     ],
@@ -356,7 +356,7 @@ router.get(
 router.get(
     "/pullrequest-reviews/from/:fromDate/to/:toDate",
     [
-        validator.loginParamValidtor(),
+        validator.loginParamValidator(),
         validator.dateParamValidator("fromDate"),
         validator.dateParamValidator("toDate"),
     ],
@@ -441,7 +441,7 @@ router.get(
 router.get(
     "/issue-comments/from/:fromDate/to/:toDate",
     [
-        validator.loginParamValidtor(),
+        validator.loginParamValidator(),
         validator.dateParamValidator("fromDate"),
         validator.dateParamValidator("toDate"),
     ],
@@ -513,7 +513,7 @@ router.get(
 router.get(
     "/commit-comments/from/:fromDate/to/:toDate",
     [
-        validator.loginParamValidtor(),
+        validator.loginParamValidator(),
         validator.dateParamValidator("fromDate"),
         validator.dateParamValidator("toDate"),
     ],

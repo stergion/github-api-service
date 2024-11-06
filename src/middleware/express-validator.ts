@@ -15,15 +15,15 @@ function GitHubNameParamValidator(name: string, alias: string) {
         .matches(/^[a-zA-Z0-9-]+$/)
         .withMessage(`GitHub ${alias} can only contain alphanumeric characters and hyphens`);
 }
-export function loginParamValidtor() {
+export function loginParamValidator() {
     return GitHubNameParamValidator("login", "username");
 }
 
-export function githubOwnerParamValidtor() {
+export function githubOwnerParamValidator() {
     return GitHubNameParamValidator("owner", "repository owner");
 }
 
-export function githubNameParamValidtor() {
+export function githubNameParamValidator() {
     return GitHubNameParamValidator("name", "repository name");
 }
 

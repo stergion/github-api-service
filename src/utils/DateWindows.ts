@@ -40,7 +40,7 @@ export class DateWindows {
     } else {
       const ymd = ymdOrFromDate;
       const fromDate = this.incrementUTCDate(this.toDate, { days: 1 });
-      this.fromDate = this.decrimentUTCDate(fromDate, ymd);
+      this.fromDate = this.decrementUTCDate(fromDate, ymd);
     }
   }
 
@@ -88,7 +88,7 @@ export class DateWindows {
     return date;
   }
 
-  private decrimentUTCDate(date: Date, dateTime: DateTime): Date {
+  private decrementUTCDate(date: Date, dateTime: DateTime): Date {
     date.setUTCMilliseconds(date.getUTCMilliseconds() - (dateTime.millis ?? 0));
     date.setUTCSeconds(date.getUTCSeconds() - (dateTime.seconds ?? 0));
     date.setUTCMinutes(date.getUTCMinutes() - (dateTime.minutes ?? 0));
@@ -124,9 +124,9 @@ export class DateWindows {
     const windows = [];
 
     while (start > this.fromDate) {
-      start = this.setStartOfDay(this.decrimentUTCDate(new Date(start), interval));
+      start = this.setStartOfDay(this.decrementUTCDate(new Date(start), interval));
       windows.push([start, end] as [Date, Date]);
-      end = this.setEndOfDay(this.decrimentUTCDate(new Date(end), interval));
+      end = this.setEndOfDay(this.decrementUTCDate(new Date(end), interval));
     }
 
     if (windows.at(-1)?.[0]) windows.at(-1)![0] = this.fromDate;

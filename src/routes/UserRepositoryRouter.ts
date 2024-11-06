@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 
 import {
-    fetchRepositoriesCommitedToInfo,
+    fetchRepositoriesCommittedToInfo,
     fetchRepositoriesContributedToInfo,
 } from "../service/RepositoryService.js";
 import * as validator from "../middleware/express-validator.js";
@@ -17,7 +17,7 @@ type RepositoriesContributedToRequest = {
     toDate: string;
 };
 
-type RepositoriesCommitedToRequest = {
+type RepositoriesCommittedToRequest = {
     login: string;
     fromDate: string;
     toDate: string;
@@ -70,7 +70,7 @@ type RepositoriesCommitedToRequest = {
 router.get(
     "/contributed-to/from/:fromDate/to/:toDate",
     [
-        validator.loginParamValidtor(),
+        validator.loginParamValidator(),
         validator.dateParamValidator("fromDate"),
         validator.dateParamValidator("toDate"),
     ],
@@ -100,7 +100,7 @@ router.get(
 
 /**
  * @swagger
- * /api/user/{login}/repositories/commited-to/from/{fromDate}/to/{toDate}:
+ * /api/user/{login}/repositories/committed-to/from/{fromDate}/to/{toDate}:
  *   get:
  *     summary: Get repositories the user has committed to within a date range
  *     description: Returns a stream of repositories that the user has directly committed code to
@@ -143,14 +143,14 @@ router.get(
  *                      $ref: '#/components/schemas/Repository'
  */
 router.get(
-    "/repositories/commited-to/from/:fromDate/to/:toDate",
+    "/repositories/committed-to/from/:fromDate/to/:toDate",
     [
-        validator.loginParamValidtor(),
+        validator.loginParamValidator(),
         validator.dateParamValidator("fromDate"),
         validator.dateParamValidator("toDate"),
     ],
     validator.run(),
-    async (req: Request<RepositoriesCommitedToRequest>, res: Response) => {
+    async (req: Request<RepositoriesCommittedToRequest>, res: Response) => {
         const { octokit } = req;
         const { login, fromDate, toDate } = req.params as typeof req.params & {
             login: string;
@@ -158,7 +158,7 @@ router.get(
 
         const stream = new SSEStream(res);
 
-        const it = fetchRepositoriesCommitedToInfo(
+        const it = fetchRepositoriesCommittedToInfo(
             octokit,
             login,
             new Date(fromDate),

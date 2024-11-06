@@ -22,7 +22,7 @@ export class RequestParamsValidationError extends StructuredError {
             statusCode: this.statusCode,
             name: this.name,
             message: this.message,
-            deatils: this.details,
+            details: this.details,
         };
     }
 }

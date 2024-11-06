@@ -1,7 +1,7 @@
 import { gql } from "graphql-tag";
 
-export const repositoriesCommitedTo = gql`
-query repositoriesCommitedTo(
+export const repositoriesCommittedTo = gql`
+query repositoriesCommittedTo(
   $login: String!
   $fromDate: DateTime
   $toDate: DateTime
