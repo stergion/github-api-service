@@ -1,7 +1,8 @@
 {
-  "name": "gihub-client-service",
+  "name": "github-client-service",
   "version": "1.0.0",
   "description": "A service for making requests to GitHub API",
+  "author": "Stergios Nanos",
   "main": "src/app.js",
   "type": "module",
   "scripts": {
@@ -12,8 +13,10 @@
     "start": "node ./dist/app.js",
     "generate": "./generate_typed_queries"
   },
-  "author": "Stergios Nanos",
-  "license": "ISC",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^5.0.1",
