@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { SSEError } from "./errors/SSEError.js";
 
 export class SSEStream {
     private res: Response;
@@ -25,6 +26,10 @@ export class SSEStream {
         this.res.write(`data: ${JSON.stringify(data)}\n\n`);
     }
 
+    private writeError(data: Record<string, any>) {
+        this.res.write(`event: error\ndata: ${JSON.stringify(data)}\n\n`);
+    }
+
     public async streamResponse<U extends Record<string, any> | Record<string, any>[]>(
         queryRes: Promise<U> | U
     ) {
@@ -37,5 +42,9 @@ export class SSEStream {
         } else {
             this.writeEvent(response);
         }
+    }
+
+    public streamError(error: SSEError) {
+        this.writeError(error.toData());
     }
 }
