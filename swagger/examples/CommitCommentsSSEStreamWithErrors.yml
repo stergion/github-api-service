@@ -1,0 +1,63 @@
+components:
+    examples:
+        CommitCommentsSSEStreamWithValidationError:
+            summary: Example SSE stream of commit comments with validation error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 400,
+                  "name": "RequestParamsValidationError",
+                  "message": "One or more request parameters failed validation",
+                  "details": [
+                    {
+                      "value": "invalid-user!@#",
+                      "message": "Login must be alphanumeric with single hyphens",
+                      "location": "params",
+                      "path": "login"
+                    }
+                  ]
+                }
+        CommitCommentsSSEStreamWithUserNotFoundError:
+            summary: Example SSE stream of commit comments with user not found error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 404,
+                  "name": "NotGithubUser", 
+                  "message": "Could not find user with the login of 'nonexistent-user'"
+                }
+        CommitCommentsSSEStreamWithInternalServerError:
+            summary: Example SSE stream of commit comments with internal server error
+            value: |
+                event: success
+                data: {
+                  "id": "CC_kwDOAB12345",
+                  "url": "https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e#commitcomment-123456",
+                  "createdAt": "2024-01-15T14:30:00Z",
+                  "updatedAt": "2024-01-15T14:30:00Z",
+                  "publishedAt": "2024-01-15T14:30:00Z",
+                  "lastEditedAt": null,
+                  "position": 42,
+                  "body": "Consider adding error handling here for network timeouts",
+                  "commit": {
+                    "id": "C_kwDOAB12345",
+                    "url": "https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e"
+                  },
+                  "repository": {
+                    "name": "Hello-World",
+                    "owner": {
+                      "login": "octocat"
+                    }
+                  },
+                  "reactions": {
+                    "totalCount": 3
+                  }
+                }
+
+                event: error
+                data: {
+                  "statusCode": 500,
+                  "name": "InternalServerError",
+                  "message": "An unexpected error occurred"
+                }
+

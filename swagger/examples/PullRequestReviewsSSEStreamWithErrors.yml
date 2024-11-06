@@ -1,0 +1,81 @@
+components:
+    examples:
+        PullRequestReviewsSSEStreamWithValidationError:
+            summary: Example SSE stream of pull request reviews with validation error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 400,
+                  "name": "RequestParamsValidationError",
+                  "message": "One or more request parameters failed validation",
+                  "details": [
+                    {
+                      "value": "invalid-user!@#",
+                      "message": "Login must be alphanumeric with single hyphens",
+                      "location": "params",
+                      "path": "login"
+                    }
+                  ]
+                }
+        PullRequestReviewsSSEStreamWithUserNotFoundError:
+            summary: Example SSE stream of pull request reviews with user not found error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 404,
+                  "name": "NotGithubUser", 
+                  "message": "Could not find user with the login of 'nonexistent-user'"
+                }
+        PullRequestReviewsSSEStreamWithInternalServerError:
+            summary: Example SSE stream of pull request reviews with internal server error
+            value: |
+                event: success
+                data: {
+                  "id": "PRR_kwDOAB12345",
+                  "url": "https://github.com/octocat/Hello-World/pull/123#pullrequestreview-123456",
+                  "createdAt": "2024-01-15T14:30:00Z",
+                  "updatedAt": "2024-01-15T14:30:00Z",
+                  "publishedAt": "2024-01-15T14:30:00Z",
+                  "submittedAt": "2024-01-15T14:30:00Z",
+                  "lastEditedAt": null,
+                  "state": "CHANGES_REQUESTED",
+                  "body": "Good work overall, but there are some security concerns that need to be addressed.",
+                  "repository": {
+                    "name": "Hello-World",
+                    "owner": {
+                      "login": "octocat"
+                    }
+                  },
+                  "pullRequest": {
+                    "id": "PR_kwDOAB12345",
+                    "url": "https://github.com/octocat/Hello-World/pull/123"
+                  },
+                  "comments": {
+                    "totalCount": 2,
+                    "nodes": [
+                      {
+                        "id": "PRRC_kwDOAB12345",
+                        "url": "https://github.com/octocat/Hello-World/pull/123#discussion_r123456",
+                        "body": "Consider adding input validation here",
+                        "author": {
+                          "login": "reviewer1"
+                        }
+                      },
+                      {
+                        "id": "PRRC_kwDOAB12346",
+                        "url": "https://github.com/octocat/Hello-World/pull/123#discussion_r123457",
+                        "body": "This might be vulnerable to XSS attacks",
+                        "author": {
+                          "login": "reviewer1"
+                        }
+                      }
+                    ]
+                  }
+                }
+                                
+                event: error
+                data: {
+                  "statusCode": 500,
+                  "name": "InternalServerError",
+                  "message": "An unexpected error occurred"
+                }

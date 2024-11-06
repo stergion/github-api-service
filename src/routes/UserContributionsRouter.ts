@@ -110,6 +110,12 @@ type CommitCommentsRequestParams = {
  *             examples:
  *               CommitSSEStream:
  *                 $ref: '#/components/examples/CommitsSSEStream'
+ *               CommitsSSEStreamWithValidationError:
+ *                 $ref: '#/components/examples/CommitsSSEStreamWithValidationError'
+ *               CommitsSSEStreamWithUserNotFoundError:
+ *                 $ref: '#/components/examples/CommitsSSEStreamWithUserNotFoundError'
+ *               CommitsSSEStreamWithInternalServerError:
+ *                 $ref: '#/components/examples/CommitsSSEStreamWithInternalServerError'
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a commit object
@@ -221,6 +227,12 @@ router.get(
  *             examples:
  *               IssueSSEStream:
  *                 $ref: '#/components/examples/IssuesSSEStream'
+ *               IssuesSSEStreamWithValidationError:
+ *                 $ref: '#/components/examples/IssuesSSEStreamWithValidationError'
+ *               IssuesSSEStreamWithUserNotFoundError:
+ *                 $ref: '#/components/examples/IssuesSSEStreamWithUserNotFoundError'
+ *               IssuesSSEStreamWithInternalServerError:
+ *                 $ref: '#/components/examples/IssuesSSEStreamWithInternalServerError'
  *             schema:
  *               type: object
  *               description: Event stream where each event contains an issue object
@@ -328,6 +340,12 @@ router.get(
  *             examples:
  *               PullRequestSSEStream:
  *                 $ref: '#/components/examples/PullRequestsSSEStream'
+ *               PullRequestsSSEStreamWithValidationError:
+ *                 $ref: '#/components/examples/PullRequestsSSEStreamWithValidationError'
+ *               PullRequestsSSEStreamWithUserNotFoundError:
+ *                 $ref: '#/components/examples/PullRequestsSSEStreamWithUserNotFoundError'
+ *               PullRequestsSSEStreamWithInternalServerError:
+ *                 $ref: '#/components/examples/PullRequestsSSEStreamWithInternalServerError'
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a pull request object
@@ -439,6 +457,12 @@ router.get(
  *             examples:
  *               PullRequestReviewSSEStream:
  *                 $ref: '#/components/examples/PullRequestReviewsSSEStream'
+ *               PullRequestReviewsSSEStreamWithValidationError:
+ *                 $ref: '#/components/examples/PullRequestReviewsSSEStreamWithValidationError'
+ *               PullRequestReviewsSSEStreamWithUserNotFoundError:
+ *                 $ref: '#/components/examples/PullRequestReviewsSSEStreamWithUserNotFoundError'
+ *               PullRequestReviewsSSEStreamWithInternalServerError:
+ *                 $ref: '#/components/examples/PullRequestReviewsSSEStreamWithInternalServerError'
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a pull request review object
@@ -553,6 +577,12 @@ router.get(
  *             examples:
  *               IssueCommentSSEStream:
  *                 $ref: '#/components/examples/IssueCommentsSSEStream'
+ *               IssueCommentsSSEStreamWithValidationError:
+ *                 $ref: '#/components/examples/IssueCommentsSSEStreamWithValidationError'
+ *               IssueCommentsSSEStreamWithUserNotFoundError:
+ *                 $ref: '#/components/examples/IssueCommentsSSEStreamWithUserNotFoundError'
+ *               IssueCommentsSSEStreamWithInternalServerError:
+ *                 $ref: '#/components/examples/IssueCommentsSSEStreamWithInternalServerError'
  *             schema:
  *               type: object
  *               description: Event stream where each event contains an issue comment object
@@ -654,6 +684,12 @@ router.get(
  *             examples:
  *               CommitCommentSSEStream:
  *                 $ref: '#/components/examples/CommitCommentsSSEStream'
+ *               CommitCommentsSSEStreamWithValidationError:
+ *                 $ref: '#/components/examples/CommitCommentsSSEStreamWithValidationError'
+ *               CommitCommentsSSEStreamWithUserNotFoundError:
+ *                 $ref: '#/components/examples/CommitCommentsSSEStreamWithUserNotFoundError'
+ *               CommitCommentsSSEStreamWithInternalServerError:
+ *                 $ref: '#/components/examples/CommitCommentsSSEStreamWithInternalServerError'
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a commit comment object

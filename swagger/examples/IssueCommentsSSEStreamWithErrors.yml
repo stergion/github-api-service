@@ -1,0 +1,63 @@
+components:
+    examples:
+        IssueCommentsSSEStreamWithValidationError:
+            summary: Example SSE stream of issue comments with validation error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 400,
+                  "name": "RequestParamsValidationError",
+                  "message": "One or more request parameters failed validation",
+                  "details": [
+                    {
+                      "value": "invalid-user!@#",
+                      "message": "Login must be alphanumeric with single hyphens",
+                      "location": "params",
+                      "path": "login"
+                    }
+                  ]
+                }
+        IssueCommentsSSEStreamWithUserNotFoundError:
+            summary: Example SSE stream of issue comments with user not found error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 404,
+                  "name": "NotGithubUser", 
+                  "message": "Could not find user with the login of 'nonexistent-user'"
+                }
+        IssueCommentsSSEStreamWithInternalServerError:
+            summary: Example SSE stream of issue comments with internal server error
+            value: |
+                event: success
+                data: {
+                  "id": "IC_kwDOAB12345",
+                  "url": "https://github.com/octocat/Hello-World/issues/123#issuecomment-123456",
+                  "createdAt": "2024-01-15T14:30:00Z",
+                  "updatedAt": "2024-01-15T14:30:00Z",
+                  "publishedAt": "2024-01-15T14:30:00Z",
+                  "lastEditedAt": null,
+                  "body": "I've reproduced this issue on Node.js 18.x. Here's the stack trace...",
+                  "repository": {
+                    "owner": {
+                      "login": "octocat"
+                    },
+                    "name": "Hello-World"
+                  },
+                  "issue": {
+                    "id": "I_kwDOAB12345",
+                    "url": "https://github.com/octocat/Hello-World/issues/123"
+                  },
+                  "pullRequest": null,
+                  "reactions": {
+                    "totalCount": 5
+                  }
+                }
+                
+                event: error
+                data: {
+                  "statusCode": 500,
+                  "name": "InternalServerError",
+                  "message": "An unexpected error occurred"
+                }
+

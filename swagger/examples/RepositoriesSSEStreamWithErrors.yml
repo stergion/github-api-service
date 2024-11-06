@@ -1,0 +1,87 @@
+components:
+    examples:
+        RepositoriesSSEStreamWithValidationError:
+            summary: Example SSE stream of repositories with validation error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 400,
+                  "name": "RequestParamsValidationError",
+                  "message": "One or more request parameters failed validation",
+                  "details": [
+                    {
+                      "value": "invalid-user!@#",
+                      "message": "Login must be alphanumeric with single hyphens",
+                      "location": "params",
+                      "path": "login"
+                    }
+                  ]
+                }
+        RepositoriesSSEStreamWithUserNotFoundError:
+            summary: Example SSE stream of repositories with user not found error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 404,
+                  "name": "NotGithubUser", 
+                  "message": "Could not find user with the login of 'nonexistent-user'"
+                }
+        RepositoriesSSEStreamWithInternalServerError:
+            summary: Example SSE stream of repositories with internal server error
+            value: |
+                event: success
+                data: {
+                  "id": "MDEwOlJlcG9zaXRvcnkxMjM0NTY=",
+                  "name": "project-alpha",
+                  "url": "https://github.com/octocat/project-alpha",
+                  "owner": {
+                    "login": "octocat"
+                  },
+                  "stargazerCount": 1500,
+                  "forkCount": 250,
+                  "primaryLanguage": {
+                    "name": "TypeScript"
+                  },
+                  "languages": {
+                    "totalCount": 3,
+                    "totalSize": 45000,
+                    "edges": [
+                      {
+                        "size": 30000,
+                        "node": {
+                          "name": "TypeScript"
+                        }
+                      }
+                    ]
+                  },
+                  "labels": {
+                    "totalCount": 2,
+                    "nodes": [
+                      {
+                        "name": "bug",
+                        "description": "Something isn't working"
+                      }
+                    ]
+                  },
+                  "repositoryTopics": {
+                    "totalCount": 1,
+                    "nodes": [
+                      {
+                        "topic": {
+                          "name": "api"
+                        }
+                      }
+                    ]
+                  },
+                  "watchers": {
+                    "totalCount": 75
+                  }
+                }
+                
+                event: error
+                data: {
+                  "statusCode": 500,
+                  "name": "InternalServerError",
+                  "message": "An unexpected error occurred"
+                }
+

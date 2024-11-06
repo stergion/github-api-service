@@ -1,0 +1,85 @@
+components:
+    examples:
+        IssuesSSEStreamWithValidationError:
+            summary: Example SSE stream of issues with validation error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 400,
+                  "name": "RequestParamsValidationError",
+                  "message": "One or more request parameters failed validation",
+                  "details": [
+                    {
+                      "value": "invalid-user!@#",
+                      "message": "Login must be alphanumeric with single hyphens",
+                      "location": "params",
+                      "path": "login"
+                    }
+                  ]
+                }
+        IssuesSSEStreamWithUserNotFoundError:
+            summary: Example SSE stream of issues with user not found error
+            value: |
+                event: error
+                data: {
+                  "statusCode": 404,
+                  "name": "NotGithubUser", 
+                  "message": "Could not find user with the login of 'nonexistent-user'"
+                }
+        IssuesSSEStreamWithInternalServerError:
+            summary: Example SSE stream of issues with internal server error
+            value: |
+                event: success
+                event: success
+                data: {
+                  "id": "I_kwDOAB12345",
+                  "url": "https://github.com/octocat/Hello-World/issues/123",
+                  "createdAt": "2024-01-15T14:30:00Z",
+                  "updatedAt": "2024-01-15T16:45:00Z",
+                  "closedAt": null,
+                  "state": "OPEN",
+                  "title": "Bug: Application crashes on high memory load",
+                  "body": "When processing large datasets, the application crashes with OutOfMemoryError.\n\nSteps to reproduce:\n1. Load dataset > 1GB\n2. Process all records\n3. Observe crash",
+                  "repository": {
+                    "owner": {
+                      "login": "octocat"
+                    },
+                    "name": "Hello-World"
+                  },
+                  "timelineItems": {
+                    "nodes": [
+                      {
+                        "actor": {
+                          "login": "developer1"
+                        }
+                      }
+                    ]
+                  },
+                  "reactions": {
+                    "totalCount": 5
+                  },
+                  "labels": {
+                    "totalCount": 2,
+                    "nodes": [
+                      {
+                        "name": "bug",
+                        "description": "Something isn't working"
+                      },
+                      {
+                        "name": "high-priority",
+                        "description": "Needs immediate attention"
+                      }
+                    ]
+                  },
+                  "comments": {
+                    "totalCount": 3
+                  }
+                }
+                
+                event: error
+                data: {
+                  "statusCode": 500,
+                  "name": "InternalServerError",
+                  "message": "An unexpected error occurred"
+                }
+
