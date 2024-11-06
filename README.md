@@ -18,16 +18,16 @@ A simple REST API service that provides detailed GitHub user contribution data u
 ## Installation
 Download the repository with git clone:
 ```
-git clone https://github.com/stergion/gihub-api-service.git
+git clone https://github.com/stergion/github-api-service.git
 ```
 or curl
 ```
-curl https://github.com/stergion/gihub-api-service.git
+curl -L -O https://github.com/stergion/github-api-service/archive/main.zip
 ```
 
 Navigate to the project directory
 ```
-cd gihub-api-service
+cd github-api-service
 ```
 
 Install dependencies
@@ -58,5 +58,3 @@ The API will be available at `http://localhost:3000`
 ## API Documentation
 
 Access the Swagger UI at `http://localhost:3000/api-docs`
-
-
