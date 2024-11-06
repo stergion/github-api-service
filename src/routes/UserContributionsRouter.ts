@@ -113,9 +113,35 @@ type CommitCommentsRequestParams = {
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a commit object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/CommitWithFiles'
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['success']
+ *                     data:
+ *                       $ref: '#/components/schemas/CommitWithFiles'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/RequestParamsValidationError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/NotGithubUserError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/commits/:owner/:name/:fromDate/:toDate",
@@ -198,9 +224,35 @@ router.get(
  *             schema:
  *               type: object
  *               description: Event stream where each event contains an issue object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/Issue'
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['success']
+ *                     data:
+ *                       $ref: '#/components/schemas/Issue'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/RequestParamsValidationError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/NotGithubUserError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/issues/from/:fromDate/to/:toDate",
@@ -279,9 +331,35 @@ router.get(
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a pull request object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/PullRequest'
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['success']
+ *                     data:
+ *                       $ref: '#/components/schemas/PullRequest'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/RequestParamsValidationError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/NotGithubUserError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/pullrequests/from/:fromDate/to/:toDate",
@@ -364,9 +442,35 @@ router.get(
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a pull request review object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/PullRequestReview'
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['success']
+ *                     data:
+ *                       $ref: '#/components/schemas/PullRequestReview'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/RequestParamsValidationError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/NotGithubUserError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/pullrequest-reviews/from/:fromDate/to/:toDate",
@@ -452,9 +556,35 @@ router.get(
  *             schema:
  *               type: object
  *               description: Event stream where each event contains an issue comment object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/IssueComment'
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['success']
+ *                     data:
+ *                       $ref: '#/components/schemas/IssueComment'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/RequestParamsValidationError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/NotGithubUserError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/issue-comments/from/:fromDate/to/:toDate",
@@ -527,9 +657,35 @@ router.get(
  *             schema:
  *               type: object
  *               description: Event stream where each event contains a commit comment object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/CommitComment'
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['success']
+ *                     data:
+ *                       $ref: '#/components/schemas/CommitComment'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/RequestParamsValidationError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/NotGithubUserError'
+ *                 - type: object
+ *                   properties:
+ *                     event:
+ *                       type: string
+ *                       enum: ['error']
+ *                     data:
+ *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/commit-comments/from/:fromDate/to/:toDate",
