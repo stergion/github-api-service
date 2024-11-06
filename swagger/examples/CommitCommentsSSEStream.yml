@@ -1,6 +1,6 @@
 components:
     examples:
-        CommitCommentSSEStream:
+        CommitCommentsSSEStream:
             summary: Example SSE stream of commit comments
             value: |
                 event: success
@@ -28,6 +28,7 @@ components:
                   }
                 }
 
+                event: success
                 data: {
                   "id": "CC_kwDOAB12346",
                   "url": "https://github.com/octocat/Hello-World/commit/7dcb09b5b57875f334f61aebed695e2e4193db5f#commitcomment-123457",

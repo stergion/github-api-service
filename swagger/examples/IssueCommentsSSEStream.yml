@@ -28,6 +28,7 @@ components:
                   }
                 }
 
+                event: success
                 data: {
                   "id": "IC_kwDOAB12346",
                   "url": "https://github.com/octocat/Hello-World/pull/456#discussion_r123457",

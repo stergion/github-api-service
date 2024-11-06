@@ -64,6 +64,7 @@ components:
                   ]
                 }
 
+                event: success
                 data: {
                   "id": "C_kwDOAB12346",
                   "oid": "7dcb09b5b57875f334f61aebed695e2e4193db5f",

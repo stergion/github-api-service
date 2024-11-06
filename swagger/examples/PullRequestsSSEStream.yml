@@ -61,6 +61,7 @@ components:
                   }
                 }
 
+                event: success
                 data: {
                   "id": "PR_kwDOAB12346",
                   "url": "https://github.com/octocat/Hello-World/pull/124",

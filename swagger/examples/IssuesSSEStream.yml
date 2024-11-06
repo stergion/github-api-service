@@ -49,6 +49,7 @@ components:
                   }
                 }
 
+                event: success
                 data: {
                   "id": "I_kwDOAB12346",
                   "url": "https://github.com/octocat/Hello-World/issues/124",

@@ -52,6 +52,7 @@ components:
                   }
                 }
 
+                event: success
                 data: {
                   "id": "MDEwOlJlcG9zaXRvcnk5ODc2NTQ=",
                   "name": "project-beta",
