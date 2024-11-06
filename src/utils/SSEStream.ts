@@ -5,7 +5,9 @@ export class SSEStream {
 
     constructor(res: Response) {
         this.res = res;
-        this.initializeHeaders();
+        if (!res.headersSent) {
+            this.initializeHeaders();
+        }
     }
 
     private initializeHeaders(): void {
