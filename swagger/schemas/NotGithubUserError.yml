@@ -1,0 +1,14 @@
+components:
+    schemas:
+        NotGithubUserError:
+            type: object
+            properties:
+                statusCode:
+                    type: number
+                    example: 404
+                name:
+                    type: string
+                    example: NotGithubUser
+                message:
+                    type: string
+                    example: Could not find user with the login of 'username'

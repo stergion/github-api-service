@@ -1,0 +1,27 @@
+components:
+    schemas:
+        RequestParamsValidationError:
+            type: object
+            properties:
+                statusCode:
+                    type: number
+                    example: 400
+                name:
+                    type: string
+                    example: RequestParamsValidationError
+                message:
+                    type: string
+                    example: One or more request parameters failed validation
+                details:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            value:
+                                type: string
+                            message:
+                                type: string
+                            location:
+                                type: string
+                            path:
+                                type: string

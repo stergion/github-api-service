@@ -1,0 +1,14 @@
+components:
+    schemas:
+        InternalServerError:
+            type: object
+            properties:
+                statusCode:
+                    type: number
+                    example: 500
+                name:
+                    type: string
+                    example: InternalServerError
+                message:
+                    type: string
+                    example: An unexpected error occurred
