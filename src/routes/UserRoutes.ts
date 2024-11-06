@@ -28,6 +28,24 @@ const router = express.Router({ mergeParams: true });
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UserInfo'
+ *       400:
+ *         description: Validation error in request parameters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RequestParamsValidationError'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/NotGithubUserError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/:login",
