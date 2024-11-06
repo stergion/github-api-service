@@ -3,6 +3,7 @@ components:
         RepositoriesSSEStream:
             summary: Example SSE stream of Repositories
             value: |
+                event: success
                 data: {
                   "id": "MDEwOlJlcG9zaXRvcnkxMjM0NTY=",
                   "name": "project-alpha",

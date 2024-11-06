@@ -3,6 +3,7 @@ components:
         CommitsSSEStream:
             summary: Example SSE stream of commits
             value: |
+                event: success
                 data: {
                   "id": "C_kwDOAB12345",
                   "oid": "6dcb09b5b57875f334f61aebed695e2e4193db5e",

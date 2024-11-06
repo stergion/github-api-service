@@ -53,7 +53,7 @@ type RepositoriesCommittedToRequest = {
  *           format: date
  *         description: End date for contributions range
  *     responses:
- *       200:
+ *       207:
  *         description: Stream of repositories
  *         content:
  *           text/event-stream:
@@ -128,7 +128,7 @@ router.get(
  *           format: date
  *         description: End date for commits range
  *     responses:
- *       200:
+ *       207:
  *         description: Stream of repositories
  *         content:
  *           text/event-stream:

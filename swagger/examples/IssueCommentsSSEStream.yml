@@ -3,6 +3,7 @@ components:
         IssueCommentsSSEStream:
             summary: Example SSE stream of issue comments
             value: |
+                event: success
                 data: {
                   "id": "IC_kwDOAB12345",
                   "url": "https://github.com/octocat/Hello-World/issues/123#issuecomment-123456",

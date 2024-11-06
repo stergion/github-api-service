@@ -15,6 +15,7 @@ export class SSEStream {
         this.res.setHeader("Content-Type", "text/event-stream");
         this.res.setHeader("Cache-Control", "no-cache");
         this.res.setHeader("Connection", "keep-open");
+        this.res.status(207)
 
         // Flush headers immediately
         if ("flushHeaders" in this.res) {
@@ -23,7 +24,7 @@ export class SSEStream {
     }
 
     private writeEvent(data: any): void {
-        this.res.write(`data: ${JSON.stringify(data)}\n\n`);
+        this.res.write(`event: success\ndata: ${JSON.stringify(data)}\n\n`);
     }
 
     private writeError(data: Record<string, any>) {

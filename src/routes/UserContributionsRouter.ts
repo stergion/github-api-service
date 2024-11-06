@@ -103,7 +103,7 @@ type CommitCommentsRequestParams = {
  *           format: date
  *         description: End date for commits range
  *     responses:
- *       200:
+ *       207:
  *         description: Stream of commits
  *         content:
  *           text/event-stream:
@@ -188,7 +188,7 @@ router.get(
  *           format: date
  *         description: End date for issues range
  *     responses:
- *       200:
+ *       207:
  *         description: Stream of issues
  *         content:
  *           text/event-stream:
@@ -269,7 +269,7 @@ router.get(
  *           format: date
  *         description: End date for pull requests range
  *     responses:
- *       200:
+ *       207:
  *         description: Stream of pull requests
  *         content:
  *           text/event-stream:
@@ -354,7 +354,7 @@ router.get(
  *           format: date
  *         description: End date for pull request reviews range
  *     responses:
- *       200:
+ *       207:
  *         description: Stream of pull request reviews
  *         content:
  *           text/event-stream:
@@ -442,7 +442,7 @@ router.get(
  *           format: date
  *         description: End date for issue comments range
  *     responses:
- *       200:
+ *       207:
  *         description: Stream of issue comments
  *         content:
  *           text/event-stream:
@@ -517,7 +517,7 @@ router.get(
  *           format: date
  *         description: End date for commit comments range
  *     responses:
- *       200:
+ *       207:
  *         description: Stream of commit comments
  *         content:
  *           text/event-stream:

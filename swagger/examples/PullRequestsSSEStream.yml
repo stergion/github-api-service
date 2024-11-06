@@ -3,6 +3,7 @@ components:
         PullRequestsSSEStream:
             summary: Example SSE stream of pull requests
             value: |
+                event: success
                 data: {
                   "id": "PR_kwDOAB12345",
                   "url": "https://github.com/octocat/Hello-World/pull/123",

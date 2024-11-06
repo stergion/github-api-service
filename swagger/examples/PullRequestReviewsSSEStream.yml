@@ -3,6 +3,8 @@ components:
         PullRequestReviewsSSEStream:
             summary: Example SSE stream of pull request reviews
             value: |
+            
+                event: success
                 data: {
                   "id": "PRR_kwDOAB12345",
                   "url": "https://github.com/octocat/Hello-World/pull/123#pullrequestreview-123456",
