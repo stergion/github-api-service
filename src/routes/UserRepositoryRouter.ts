@@ -6,6 +6,7 @@ import {
 } from "../service/RepositoryService.js";
 import * as validator from "../middleware/express-validator.js";
 import { SSEStream } from "../utils/SSEStream.js";
+import { SSEError } from "../utils/errors/SSEError.js";
 
 export { router as UserRepositoryRouter };
 
@@ -76,25 +77,29 @@ router.get(
     ],
     validator.run(),
     async (req: Request<RepositoriesContributedToRequest>, res: Response) => {
-        const { octokit } = req;
-        const { login, fromDate, toDate } = req.params;
+        try {
+            const { octokit } = req;
+            const { login, fromDate, toDate } = req.params;
 
-        const stream = new SSEStream(res);
+            const stream = new SSEStream(res);
 
-        const it = fetchRepositoriesContributedToInfo(
-            octokit,
-            login,
-            new Date(fromDate),
-            new Date(toDate)
-        );
+            const it = fetchRepositoriesContributedToInfo(
+                octokit,
+                login,
+                new Date(fromDate),
+                new Date(toDate)
+            );
 
-        const promises = [];
-        for await (const repository of it) {
-            promises.push(stream.streamResponse(repository));
+            const promises = [];
+            for await (const repository of it) {
+                promises.push(stream.streamResponse(repository));
+            }
+            await Promise.all(promises);
+
+            res.end();
+        } catch (error: any) {
+            throw new SSEError(error);
         }
-        await Promise.all(promises);
-
-        res.end();
     }
 );
 
@@ -151,26 +156,30 @@ router.get(
     ],
     validator.run(),
     async (req: Request<RepositoriesCommittedToRequest>, res: Response) => {
-        const { octokit } = req;
-        const { login, fromDate, toDate } = req.params as typeof req.params & {
-            login: string;
-        };
+        try {
+            const { octokit } = req;
+            const { login, fromDate, toDate } = req.params as typeof req.params & {
+                login: string;
+            };
 
-        const stream = new SSEStream(res);
+            const stream = new SSEStream(res);
 
-        const it = fetchRepositoriesCommittedToInfo(
-            octokit,
-            login,
-            new Date(fromDate),
-            new Date(toDate)
-        );
+            const it = fetchRepositoriesCommittedToInfo(
+                octokit,
+                login,
+                new Date(fromDate),
+                new Date(toDate)
+            );
 
-        const promises = [];
-        for await (const repository of it) {
-            promises.push(stream.streamResponse(repository));
+            const promises = [];
+            for await (const repository of it) {
+                promises.push(stream.streamResponse(repository));
+            }
+            await Promise.all(promises);
+
+            res.end();
+        } catch (error: any) {
+            throw new SSEError(error);
         }
-        await Promise.all(promises);
-
-        res.end();
     }
 );
