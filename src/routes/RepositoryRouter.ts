@@ -41,6 +41,18 @@ type RepositoryRequestParams = {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Repository'
+ *       400:
+ *         description: Validation error in request parameters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RequestParamsValidationError'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
     "/:owner/:name",
