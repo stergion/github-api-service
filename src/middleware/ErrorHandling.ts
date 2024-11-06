@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { JsonResponse, StructuredError } from "../utils/errors/StructuredError.js";
+import { RouteNotFoundError } from "../utils/errors/NotFound.js";
 
 export function errorResponseHandler(err: Error, req: Request, res: Response, next: NextFunction) {
     if (!(err instanceof StructuredError)) {
@@ -10,9 +11,8 @@ export function errorResponseHandler(err: Error, req: Request, res: Response, ne
 }
 
 export function notFoundHandler(req: Request, res: Response, next: NextFunction) {
-    // const err = new NotFound("", req.method, req.url);
-    // next(err);
-    throw new Error("TEST");
+    const err = new RouteNotFoundError("", req.method, req.url);
+    next(err);
 }
 
 export function fallbackErrorHandler(
