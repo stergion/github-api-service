@@ -14,7 +14,7 @@
     "generate": "./generate_typed_queries"
   },
   "engines": {
-    "node": "^22.0.0",
+    "node": "^22.0.0"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
