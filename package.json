@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build --force --sourceMap false",
-    "build_watch": "tsc --build --sourceMap --watch",
+    "build-watch": "tsc --build --sourceMap --watch",
     "serve": "node --watch-path=./dist ./dist/app.js",
     "start": "node ./dist/app.js",
     "generate": "./generate_typed_queries"
