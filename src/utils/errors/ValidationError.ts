@@ -1,7 +1,5 @@
-import { FieldValidationError } from "express-validator";
+import { ValidationError } from "express-validator";
 import { ErrorDetails, StructuredError } from "./StructuredError.js";
-
-type ValidationError = Omit<FieldValidationError, "type"> | Record<string, any>;
 
 export class RequestParamsValidationError extends StructuredError {
     name = "RequestParamsValidationError";
@@ -12,8 +10,8 @@ export class RequestParamsValidationError extends StructuredError {
     constructor(errors: Array<ValidationError>) {
         super();
         this.details = errors.map((error) => {
-            const { location, path, value, msg } = error;
-            return { value, message: msg, location, path };
+            const { type, msg, ...rest } = error;
+            return { message: msg, ...rest };
         });
     }
 
