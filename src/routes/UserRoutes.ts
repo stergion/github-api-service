@@ -3,6 +3,7 @@ import express, { Request, Response } from "express";
 import { UserInfo } from "../graphql/dto_types.js";
 import * as validator from "../middleware/express-validator.js";
 import { fetchUserInfo } from "../service/UserService.js";
+import { getUserInfo } from "../controllers/UserController.js";
 
 export { router as UserRouter };
 
@@ -47,18 +48,4 @@ const router = express.Router({ mergeParams: true });
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.get(
-    "/:login",
-    validator.loginParamValidator(),
-    validator.run(),
-    async (req: Request<{ login: string }>, res: Response<UserInfo>) => {
-        const {
-            octokit,
-            params: { login },
-        } = req;
-
-        const userInfo = await fetchUserInfo(octokit, login!);
-
-        res.json(userInfo).end();
-    }
-);
+router.get("/:login", validator.loginParamValidator(), validator.run(), getUserInfo);

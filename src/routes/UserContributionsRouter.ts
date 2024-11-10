@@ -1,65 +1,18 @@
-import express, { Request, Response } from "express";
+import express from "express";
 
-import { VariablesOf } from "@graphql-typed-document-node/core";
 import {
-    IssuesDocument,
-    PullRequestReviewsDocument,
-    PullRequestsDocument,
-} from "../graphql/typed_queries.js";
+    getCommitComments,
+    getCommits,
+    getIssueComments,
+    getIssues,
+    getPullRequestReviews,
+    getPullRequests,
+} from "../controllers/UserContributionsController.js";
 import * as validator from "../middleware/express-validator.js";
-import {
-    fetchCommitComments,
-    fetchIssueComments,
-    fetchRepositoryCommits,
-} from "../service/ContributionsService.js";
-import { fetchUserInfo } from "../service/UserService.js";
-import { DateWindows } from "../utils/DateWindows.js";
-import { SSEStream } from "../utils/SSEStream.js";
-import { getQueryNodes } from "./helpers/getQueryNodes.js";
-import { sendQueryWindowedPaginated } from "./helpers/sendQueries.js";
-import { SSEError } from "../utils/errors/SSEError.js";
 
 export { router as UserContributionsRouter };
 
 const router = express.Router({ mergeParams: true });
-
-type CommitRequestParams = {
-    login: string;
-    owner: string;
-    name: string;
-    fromDate: string;
-    toDate: string;
-};
-
-type IssueRequestParams = {
-    login: string;
-    fromDate: string;
-    toDate: string;
-};
-
-type PullRequestRequestParams = {
-    login: string;
-    fromDate: string;
-    toDate: string;
-};
-
-type PullRequestReviewsRequestParams = {
-    login: string;
-    fromDate: string;
-    toDate: string;
-};
-
-type IssueCommentsRequestParams = {
-    login: string;
-    fromDate: string;
-    toDate: string;
-};
-
-type CommitCommentsRequestParams = {
-    login: string;
-    fromDate: string;
-    toDate: string;
-};
 
 /**
  * @swagger
@@ -159,35 +112,7 @@ router.get(
         validator.dateParamValidator("toDate"),
     ],
     validator.run(),
-    async (req: Request<CommitRequestParams>, res: Response) => {
-        try {
-            const { octokit } = req;
-            const { login, owner, name } = req.params as typeof req.params & {
-                login: string;
-            };
-            const fromDate = new Date(req.params.fromDate);
-            const toDate = new Date(req.params.toDate);
-
-            const stream = new SSEStream(res);
-
-            const userInfo = await fetchUserInfo(octokit, login);
-
-            const commits = await fetchRepositoryCommits(
-                octokit,
-                userInfo.id,
-                owner,
-                name,
-                fromDate,
-                toDate
-            );
-
-            await Promise.all(commits.map(stream.streamResponse.bind(stream)));
-
-            res.end();
-        } catch (error: any) {
-            throw new SSEError(error);
-        }
-    }
+    getCommits
 );
 
 /**
@@ -274,33 +199,7 @@ router.get(
         validator.dateParamValidator("toDate"),
     ],
     validator.run(),
-    async (req: Request<IssueRequestParams>, res: Response) => {
-        try {
-            const { octokit } = req;
-            const { login, fromDate, toDate } = req.params as typeof req.params & {
-                login: string;
-            };
-
-            const stream = new SSEStream(res);
-
-            const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
-
-            const issuesQueryVariables: VariablesOf<typeof IssuesDocument> = {
-                login: login,
-                // cursor: null,
-            };
-
-            let result = dateWindows
-                .map(sendQueryWindowedPaginated(octokit, IssuesDocument, issuesQueryVariables))
-                .map(getQueryNodes)
-                .map(stream.streamResponse.bind(stream));
-            await Promise.all(result);
-
-            res.end();
-        } catch (error: any) {
-            throw new SSEError(error);
-        }
-    }
+    getIssues
 );
 
 /**
@@ -387,37 +286,7 @@ router.get(
         validator.dateParamValidator("toDate"),
     ],
     validator.run(),
-    async (req: Request<PullRequestRequestParams>, res: Response) => {
-        try {
-            const { octokit } = req;
-            const { login, fromDate, toDate } = req.params as typeof req.params & {
-                login: string;
-            };
-
-            const stream = new SSEStream(res);
-
-            const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
-
-            const pullRequestsVariables: VariablesOf<typeof PullRequestsDocument> = {
-                login: login,
-                fromDate: null,
-                toDate: null,
-                cursor: null,
-            };
-
-            const result = dateWindows
-                .map(
-                    sendQueryWindowedPaginated(octokit, PullRequestsDocument, pullRequestsVariables)
-                )
-                .map(getQueryNodes)
-                .map(stream.streamResponse.bind(stream));
-            await Promise.all(result);
-
-            res.end();
-        } catch (error: any) {
-            throw new SSEError(error);
-        }
-    }
+    getPullRequests
 );
 
 /**
@@ -504,40 +373,7 @@ router.get(
         validator.dateParamValidator("toDate"),
     ],
     validator.run(),
-    async (req: Request<PullRequestReviewsRequestParams>, res: Response) => {
-        try {
-            const { octokit } = req;
-            const { login, fromDate, toDate } = req.params as typeof req.params & {
-                login: string;
-            };
-
-            const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
-
-            const pullrequestReviewsVariables: VariablesOf<typeof PullRequestReviewsDocument> = {
-                login: login,
-                fromDate: null,
-                toDate: null,
-                cursor: null,
-            };
-
-            const stream = new SSEStream(res);
-            const result = dateWindows
-                .map(
-                    sendQueryWindowedPaginated(
-                        octokit,
-                        PullRequestReviewsDocument,
-                        pullrequestReviewsVariables
-                    )
-                )
-                .map(getQueryNodes)
-                .map(stream.streamResponse.bind(stream));
-            await Promise.all(result);
-
-            res.end();
-        } catch (error: any) {
-            throw new SSEError(error);
-        }
-    }
+    getPullRequestReviews
 );
 
 /**
@@ -624,27 +460,7 @@ router.get(
         validator.dateParamValidator("toDate"),
     ],
     validator.run(),
-    async (req: Request<IssueCommentsRequestParams>, res: Response) => {
-        try {
-            const { octokit } = req;
-            const { login } = req.params as typeof req.params & { login: string };
-
-            const fromDate = new Date(req.params.fromDate);
-            const toDate = new Date(req.params.toDate);
-
-            const promises = [];
-            const stream = new SSEStream(res);
-            const it = fetchIssueComments(octokit, login, fromDate, toDate);
-            for await (const comments of it) {
-                promises.push(stream.streamResponse(comments));
-            }
-            await Promise.all(promises);
-
-            res.end();
-        } catch (error: any) {
-            throw new SSEError(error);
-        }
-    }
+    getIssueComments
 );
 
 /**
@@ -731,25 +547,5 @@ router.get(
         validator.dateParamValidator("toDate"),
     ],
     validator.run(),
-    async (req: Request<CommitCommentsRequestParams>, res: Response) => {
-        try {
-            const { octokit } = req;
-            const { login } = req.params as typeof req.params & { login: string };
-            const fromDate = new Date(req.params.fromDate);
-            const toDate = new Date(req.params.toDate);
-
-            const it = fetchCommitComments(octokit, login, fromDate, toDate);
-
-            const stream = new SSEStream(res);
-            const promises = [];
-            for await (const comments of it) {
-                promises.push(stream.streamResponse(comments));
-            }
-            await Promise.all(promises);
-
-            res.end();
-        } catch (error: any) {
-            throw new SSEError(error);
-        }
-    }
+    getCommitComments
 );
