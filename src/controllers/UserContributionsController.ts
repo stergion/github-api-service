@@ -61,9 +61,7 @@ type CommitCommentsRequestParams = {
 export async function getCommits(req: Request<CommitRequestParams>, res: Response) {
     try {
         const { octokit } = req;
-        const { login, owner, name } = req.params as typeof req.params & {
-            login: string;
-        };
+        const { login, owner, name } = req.params;
         const fromDate = new Date(req.params.fromDate);
         const toDate = new Date(req.params.toDate);
 
@@ -91,9 +89,7 @@ export async function getCommits(req: Request<CommitRequestParams>, res: Respons
 export async function getIssues(req: Request<IssueRequestParams>, res: Response) {
     try {
         const { octokit } = req;
-        const { login, fromDate, toDate } = req.params as typeof req.params & {
-            login: string;
-        };
+        const { login, fromDate, toDate } = req.params;
 
         const stream = new SSEStream(res);
 
@@ -119,9 +115,7 @@ export async function getIssues(req: Request<IssueRequestParams>, res: Response)
 export async function getPullRequests(req: Request<PullRequestRequestParams>, res: Response) {
     try {
         const { octokit } = req;
-        const { login, fromDate, toDate } = req.params as typeof req.params & {
-            login: string;
-        };
+        const { login, fromDate, toDate } = req.params;
 
         const stream = new SSEStream(res);
 
@@ -152,9 +146,7 @@ export async function getPullRequestReviews(
 ) {
     try {
         const { octokit } = req;
-        const { login, fromDate, toDate } = req.params as typeof req.params & {
-            login: string;
-        };
+        const { login, fromDate, toDate } = req.params as typeof req.params;
 
         const dateWindows = new DateWindows(new Date(toDate), new Date(fromDate)).monthly();
 
@@ -187,7 +179,7 @@ export async function getPullRequestReviews(
 export async function getIssueComments(req: Request<IssueCommentsRequestParams>, res: Response) {
     try {
         const { octokit } = req;
-        const { login } = req.params as typeof req.params & { login: string };
+        const { login } = req.params;
 
         const fromDate = new Date(req.params.fromDate);
         const toDate = new Date(req.params.toDate);
@@ -209,7 +201,7 @@ export async function getIssueComments(req: Request<IssueCommentsRequestParams>,
 export async function getCommitComments(req: Request<CommitCommentsRequestParams>, res: Response) {
     try {
         const { octokit } = req;
-        const { login } = req.params as typeof req.params & { login: string };
+        const { login } = req.params;
         const fromDate = new Date(req.params.fromDate);
         const toDate = new Date(req.params.toDate);
 
