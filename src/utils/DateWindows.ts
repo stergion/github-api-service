@@ -165,7 +165,7 @@ export class DateWindows {
     }
 }
 
-function getDate(date: Date | undefined) {
+export function getDate(date: Date | undefined) {
     const dateNow = date ?? new Date();
     if (!(dateNow instanceof Date)) throw Error("Variable 'date' is not instance of Date");
 
@@ -176,7 +176,7 @@ function getDate(date: Date | undefined) {
     return dateNow;
 }
 
-const yearly = (years: number, date?: Date) => {
+export const yearly = (years: number, date?: Date) => {
     if (!years) throw Error("Please provide variable 'years'.");
 
     const dateNow = getDate(date);
@@ -194,7 +194,7 @@ const yearly = (years: number, date?: Date) => {
     return windows;
 };
 
-const monthly = (months: number, date?: Date) => {
+export const monthly = (months: number, date?: Date) => {
     if (!months) throw Error("Please provide variable 'months'.");
 
     const dateNow = getDate(date);
@@ -213,7 +213,7 @@ const monthly = (months: number, date?: Date) => {
     return windows;
 };
 
-const weekly = (weeks: number, date?: Date) => {
+export const weekly = (weeks: number, date?: Date) => {
     if (!weeks) throw Error("Please provide variable 'weeks'.");
 
     const dateNow = getDate(date);
@@ -232,7 +232,7 @@ const weekly = (weeks: number, date?: Date) => {
     return windows;
 };
 
-const daily = (days: number, date?: Date) => {
+export const daily = (days: number, date?: Date) => {
     if (!days) throw Error("Please provide variable 'days'.");
     const dateNow = getDate(date);
 
@@ -249,5 +249,3 @@ const daily = (days: number, date?: Date) => {
 
     return windows;
 };
-
-export default { yearly, monthly, weekly, daily };
