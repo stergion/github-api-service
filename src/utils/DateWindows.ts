@@ -223,7 +223,7 @@ export const weekly = (weeks: number, date?: Date) => {
         const end = new Date(dateNow);
         end.setUTCDate(dateNow.getUTCDate() - i * 7);
         const start = new Date(dateNow);
-        start.setUTCDate(dateNow.getUTCDate() - ((i + 1) * 7 + 1));
+        start.setUTCDate(dateNow.getUTCDate() - ((i + 1) * 7));
         start.setUTCMilliseconds(dateNow.getUTCMilliseconds() + 1);
 
         windows[i] = [start, end];
