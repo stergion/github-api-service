@@ -6,7 +6,7 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "test": "node --enable-source-maps --test --test-concurrency=1 --test-reporter=spec $(find ./dist/tests -name '*.test.js')",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build --force --sourceMap false",
     "build-watch": "tsc --build --sourceMap --watch",
     "serve": "node --watch-path=./dist ./dist/app.js",
