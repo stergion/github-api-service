@@ -4,7 +4,7 @@ export { deepFindPathToProperty, get, set };
 
 var isObject = (value: any) => Object.prototype.toString.call(value) === "[object Object]";
 
-function deepFindPathToProperty(object: any, searchProp: string, path: string[] = []): string[] | null {
+function deepFindPathToProperty(object: Record<string,any>, searchProp: string, path: string[] = []): string[] | null {
     if (isObject(object)) {
         if (object.hasOwnProperty(searchProp)) {
             return path;
@@ -38,7 +38,7 @@ function get<TData extends { [key: string]: any }, TPath extends readonly string
 
 type Mutator = any | ((value: unknown) => any);
 // @ts-ignore
-var set = (object: any, path: string[], mutator: Mutator) => {
+var set = (object: Record<string,any>, path: string[], mutator: Mutator) => {
     const lastProperty = path[path.length - 1];
     const parentPath = [...path].slice(0, -1);
     const parent = get(object, parentPath);
