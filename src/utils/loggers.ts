@@ -1,8 +1,13 @@
-export { getDirLogger };
+import { InspectOptions } from "node:util";
 
-function getDirLogger(depth: Number | null = null) {
+const defaultOptions: InspectOptions = {
+    depth: null,
+};
+
+export function getDirLogger(options?: InspectOptions) {
+    options = { ...defaultOptions, ...options };
     return async <TData extends { [key: string]: any }>(item: TData) => {
-        console.dir(await item, { depth: null, colors: true });
+        console.dir(await item, options);
         return item;
     };
 }
