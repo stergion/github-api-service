@@ -5,6 +5,11 @@ export { deepFindPathToProperty, get, set };
 var isObject = (value: any) => Object.prototype.toString.call(value) === "[object Object]";
 
 function deepFindPathToProperty(object: any, searchProp: string, path: string[] = []): string[] {
+    if (isObject(object)) {
+        if (object.hasOwnProperty(searchProp)) {
+            return path;
+        }
+    }
     for (const key of Object.keys(object)) {
         const currentPath = [...path, key];
         const currentValue = object[key];
