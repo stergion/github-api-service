@@ -25,7 +25,7 @@ async function getQueryNodes<TData extends Record<string, any>>(
 ): Promise<Awaited<any[]>> {
     const data = await responseData;
     const paginatedResourcePath = deepFindPathToProperty(data, "nodes");
-    if (paginatedResourcePath.length === 0) {
+    if (!paginatedResourcePath) {
         throw new MissingNodes(data);
     }
     return get(data, [...paginatedResourcePath, "nodes"]) as any[];
