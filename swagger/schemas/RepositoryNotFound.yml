@@ -1,0 +1,14 @@
+components:
+    schemas:
+        RepositoryNotFound:
+            type: object
+            properties:
+                statusCode:
+                    type: number
+                    example: 404
+                name:
+                    type: string
+                    example: RepositoryNotFound
+                message:
+                    type: string
+                    example: `Could not find repository with the name 'owner/name'`
