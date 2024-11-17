@@ -1,5 +1,6 @@
 import { print } from "graphql";
 import { Octokit } from "octokit";
+import { GraphqlResponseError } from "@octokit/graphql";
 
 import { Repository } from "../graphql/dto_types.js";
 import {
@@ -13,6 +14,8 @@ import {
 } from "../graphql/typed_queries.js";
 import { sendQueryWindowed } from "../routes/helpers/sendQueries.js";
 import { DateWindows } from "../utils/DateWindows.js";
+import { InternalServerError } from "../utils/errors/InternalServerError.js";
+import RepositoryNotFound from "../utils/errors/RepositoryNotFound.js";
 
 type NameWithOwnerWrappedObject = {
     repository: {
@@ -139,9 +142,28 @@ export async function fetchRepositoryInfo(
         owner,
         name,
     };
-    const repositoryQueryResponse = await octokit.graphql<RepositoryQuery>(
-        print(RepositoryDocument),
-        queryVariables
-    );
+    let repositoryQueryResponse: RepositoryQuery | undefined;
+
+    try {
+        repositoryQueryResponse = await octokit.graphql<RepositoryQuery>(
+            print(RepositoryDocument),
+            queryVariables
+        );
+    } catch (error) {
+        if (error instanceof GraphqlResponseError && error.errors) {
+            for (const e of error.errors) {
+                if (e.type === "NOT_FOUND") {
+                    throw new RepositoryNotFound(owner, name);
+                }
+            }
+        }
+        throw error;
+    }
+
+    if (!repositoryQueryResponse || !repositoryQueryResponse.repository) {
+        throw new InternalServerError(
+            new Error(`Could not fetch info for repository with name '${owner}/${name}'`)
+        );
+    }
     return repositoryQueryResponse.repository!;
 }
