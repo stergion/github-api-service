@@ -10,9 +10,8 @@ import {
 } from "../graphql/typed_queries.js";
 import { InternalServerError } from "../utils/errors/InternalServerError.js";
 import NotGithubUser from "../utils/errors/NotGithubUser.js";
-import { UserInfo } from "../graphql/dto_types.js";
 
-export async function fetchUserInfo(octokit: Octokit, login: string) {
+export async function fetchUserInfo(octokit: Octokit, login: string): Promise<UserInfo> {
     const userInfoVariables: UserInfoQueryVariables = {
         login,
     };
@@ -36,5 +35,5 @@ export async function fetchUserInfo(octokit: Octokit, login: string) {
         throw new InternalServerError(new Error("User info not found"));
     }
 
-    return userInfo.user as UserInfo;
+    return userInfo.user;
 }
