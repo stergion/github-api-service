@@ -41,7 +41,7 @@ const router = express.Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/RequestParamsValidationError'
- *      404:
+ *       404:
  *         description: Repository not found
  *         content:
  *           application/json:

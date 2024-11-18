@@ -11,4 +11,4 @@ components:
                     example: RepositoryNotFound
                 message:
                     type: string
-                    example: `Could not find repository with the name 'owner/name'`
+                    example: "Could not find repository with the name 'owner/name'"
