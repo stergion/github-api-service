@@ -11,30 +11,33 @@ components:
                 id:
                     type: string
                     description: Unique identifier for the user
+                login:
+                    type: string
+                    description: The username used to login.
                 name:
                     type: string
                     nullable: true
-                    description: Display name of the user
+                    description: The user's public profile name.
                 bio:
                     type: string
                     nullable: true
-                    description: User's biography/profile text
+                    description: The user's public profile bio
                 url:
                     type: string
                     format: uri
-                    description: URL to user's GitHub profile
+                    description: The HTTP URL to user's GitHub profile
                 email:
                     type: string
                     format: email
-                    description: User's email address
+                    description: The user's publicly visible profile email
                 avatarUrl:
                     type: string
                     format: uri
-                    description: URL to user's avatar image
+                    description: A URL pointing to the user's public avatar
                 twitterUsername:
                     type: string
                     nullable: true
-                    description: User's Twitter handle (without @ symbol)
+                    description: The user's Twitter username
                 websiteUrl:
                     type: string
                     format: uri
