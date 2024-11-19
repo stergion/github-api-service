@@ -14,6 +14,7 @@ describe("fetchUserInfo", () => {
         const mockUserInfo: UserInfoQuery = {
             user: {
                 id: "123",
+                login: "testuser",
                 name: "Test User",
                 url: "https://github.com/testuser",
                 avatarUrl: "",
