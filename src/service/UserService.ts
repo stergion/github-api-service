@@ -16,7 +16,7 @@ export async function fetchUserInfo(octokit: Octokit, login: string): Promise<Us
         login,
     };
 
-    let userInfo: UserInfoQuery | undefined;
+    let userInfo: UserInfoQuery;
 
     try {
         userInfo = await octokit.graphql<UserInfoQuery>(print(UserInfoDocument), userInfoVariables);
@@ -32,7 +32,7 @@ export async function fetchUserInfo(octokit: Octokit, login: string): Promise<Us
     }
 
     if (!userInfo || !userInfo.user) {
-        throw new InternalServerError(new Error("User info not found"));
+        throw new InternalServerError(new Error(`User '${login}' info not found`));
     }
 
     return userInfo.user;
