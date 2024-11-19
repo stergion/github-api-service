@@ -91,9 +91,9 @@ export async function* fetchRepositoriesCommittedToInfo(
                     }
                 }
             }
-            throw error
+            throw error;
         }
-        
+
         const repositories = await extractRepositoriesFromQuery(response);
         const nameWithOwners = await extractNameWithOwner(repositories);
 
@@ -131,7 +131,20 @@ export async function* fetchRepositoriesContributedToInfo(
     const uniqueRepositories = new Set<string>();
 
     for (const dateWindow of dateWindows) {
-        const response = await sendQueryFn(dateWindow);
+        let response: UserContributions;
+        try {
+            response = await sendQueryFn(dateWindow);
+        } catch (error) {
+            if (error instanceof GraphqlResponseError && error.errors) {
+                for (const e of error.errors) {
+                    if (e.type === "NOT_FOUND") {
+                        throw new NotGithubUser(login);
+                    }
+                }
+            }
+            throw error;
+        }
+
         const repositories = await extractRepositoriesFromQuery(response);
         const nameWithOwners = await extractNameWithOwner(repositories);
 
