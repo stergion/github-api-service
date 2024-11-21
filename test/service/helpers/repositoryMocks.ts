@@ -1,7 +1,6 @@
-interface IdIssuer {
-    get(): string;
-}
-export function getRepositoryInfoMock(ownerNum: number, repoNum: number, id?:IdIssuer) {
+import { IdIssuer } from "./types";
+
+export function getRepositoryInfoMock(ownerNum: number, repoNum: number, id?: IdIssuer) {
     const repo = `repo${repoNum}`;
     const owner = `owner${ownerNum}`;
     const info = {
