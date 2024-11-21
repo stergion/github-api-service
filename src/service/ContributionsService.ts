@@ -1,5 +1,6 @@
 import { print } from "graphql";
 import { Octokit } from "octokit";
+import { GraphqlResponseError } from "@octokit/graphql";
 
 import { Commit, CommitComment, CommitWithFiles, IssueComment } from "../graphql/dto_types.js";
 import {
@@ -17,6 +18,7 @@ import { getQueryNodes } from "../routes/helpers/getQueryNodes.js";
 import { sendQueryWindowedPaginated } from "../routes/helpers/sendQueries.js";
 import { windowDateFilter } from "../routes/helpers/windowDateFilter.js";
 import { DateKeys } from "../utils/UtilityTypes.js";
+import RepositoryNotFound from "../utils/errors/RepositoryNotFound.js";
 
 export async function fetchRepositoryCommits(
     octokit: Octokit,
@@ -52,11 +54,21 @@ export async function fetchRepositoryCommits(
         CommitsDocument,
         commitsQueryVariables
     );
+    try {
+        const commitsQueryResult = commitsQueryFn([fromDate, toDate]);
+        const commits: Commit[] = await getQueryNodes(commitsQueryResult);
 
-    const commitsQueryResult = commitsQueryFn([fromDate, toDate]);
-    const commits = (await getQueryNodes(commitsQueryResult)) as Commit[];
-
-    return await Promise.all(commits.map(injectCommitFiles));
+        return await Promise.all(commits.map(injectCommitFiles));
+    } catch (error) {
+        if (error instanceof GraphqlResponseError && error.errors) {
+            for (const e of error.errors) {
+                if (e.type === "NOT_FOUND") {
+                    throw new RepositoryNotFound(owner, name);
+                }
+            }
+        }
+        throw error;
+    }
 }
 
 export async function fetchCommitFiles(
