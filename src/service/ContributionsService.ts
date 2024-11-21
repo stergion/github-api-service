@@ -26,7 +26,7 @@ export async function fetchRepositoryCommits(
     fromDate: Date,
     toDate: Date,
     options?: { noFiles?: boolean }
-) {
+): Promise<CommitWithFiles[]> {
     const defaultOptions = { noFiles: false };
     options = { ...defaultOptions, ...options };
 
