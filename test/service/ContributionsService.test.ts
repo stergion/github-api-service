@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { Commit, CommitFile } from "../../src/graphql/dto_types.js";
+import { Commit, CommitFile, CommitComment } from "../../src/graphql/dto_types.js";
 import {
     getCommitFilesMock,
     getCommitMock,
@@ -8,13 +8,22 @@ import {
 import { Counter } from "./helpers/Counter.js";
 import { Octokit } from "octokit";
 import {
+    fetchCommitComments,
     fetchCommitFiles,
     fetchRepositoryCommits,
 } from "../../src/service/ContributionsService.js";
-import { CommitsDocument, CommitsQuery } from "../../src/graphql/typed_queries.js";
+import {
+    CommitCommentsDocument,
+    CommitCommentsQuery,
+    CommitsDocument,
+    CommitsQuery,
+} from "../../src/graphql/typed_queries.js";
 import { print } from "graphql";
 import fetchMock from "fetch-mock";
 import RepositoryNotFound from "../../src/utils/errors/RepositoryNotFound.js";
+import { getCommitCommentMock } from "./helpers/commitCommentMocks.js";
+import { ValuesOfCorrectType } from "graphql/validation/rules/ValuesOfCorrectType.js";
+import NotGithubUser from "../../src/utils/errors/NotGithubUser.js";
 
 describe("fetchCommitFiles", () => {
     it("should fetch commit files successfully", async () => {
@@ -312,4 +321,199 @@ describe("fetchRepositoryCommits", () => {
             )
         ).rejects.toThrow(RepositoryNotFound);
     });
+});
+
+describe("fetchCommitComments", () => {
+    it("should fetch commit comments successfully", async () => {
+        const idCounter = new Counter();
+        const commentMock1 = {
+            ...getCommitCommentMock(idCounter),
+            publishedAt: new Date("2023-01-01"),
+        };
+        const commentMock2 = {
+            ...getCommitCommentMock(idCounter),
+            publishedAt: new Date("2023-01-02"),
+        };
+        const commentMock3 = {
+            ...getCommitCommentMock(idCounter),
+            publishedAt: new Date("2023-12-31"),
+        };
+
+        const commentsResponse: CommitCommentsQuery = {
+            user: {
+                commitComments: {
+                    nodes: [commentMock1, commentMock2, commentMock3],
+                    totalCount: 2,
+                    pageInfo: {
+                        startCursor: "cursor",
+                        hasPreviousPage: false,
+                    },
+                },
+            },
+        };
+
+        // Mock the iterator function specifically
+        const iteratorMock = {
+            [Symbol.asyncIterator]: () => {
+                const values = [commentsResponse];
+                let index = 0;
+                return {
+                    async next() {
+                        return {
+                            done: index >= values.length,
+                            value: values[index++],
+                        };
+                    },
+                };
+            },
+        };
+
+        // Spy on the paginate.iterator method
+        const octokit = new Octokit({ auth: "secret123" });
+        const gqlPaginateIteratorSpy = vi.spyOn(octokit.graphql.paginate, "iterator");
+
+        gqlPaginateIteratorSpy.mockReturnValueOnce(iteratorMock);
+
+        const it = fetchCommitComments(
+            octokit,
+            "user123",
+            new Date("2023-01-01"),
+            new Date("2023-12-31")
+        );
+
+        const comments: CommitComment[] = (await Array.fromAsync(it)).flat();
+
+        expect(comments).toHaveLength(3);
+        expect(comments[0]).toEqual(commentMock1);
+        expect(comments[1]).toEqual(commentMock2);
+        expect(comments[2]).toEqual(commentMock3);
+
+        // Verify GraphQL queries
+        expect(gqlPaginateIteratorSpy).toHaveBeenCalledTimes(1);
+        expect(gqlPaginateIteratorSpy).toHaveBeenLastCalledWith(
+            print(CommitCommentsDocument),
+            expect.objectContaining({
+                login: "user123",
+            })
+        );
+    });
+
+    it("should handle empty comments", async () => {
+        const commentsResponse: CommitCommentsQuery = {
+            user: {
+                commitComments: {
+                    nodes: [],
+                    totalCount: 0,
+                    pageInfo: {
+                        startCursor: null,
+                        hasPreviousPage: false,
+                    },
+                },
+            },
+        };
+
+        const iteratorMock = {
+            [Symbol.asyncIterator]: () => {
+                const values = [commentsResponse];
+                let index = 0;
+                return {
+                    async next() {
+                        return {
+                            done: index >= values.length,
+                            value: values[index++],
+                        };
+                    },
+                };
+            },
+        };
+
+        const octokit = new Octokit({ auth: "secret123" });
+        const gqlPaginateIteratorSpy = vi
+            .spyOn(octokit.graphql.paginate, "iterator")
+            .mockReturnValueOnce(iteratorMock);
+
+        const it = fetchCommitComments(
+            octokit,
+            "user123",
+            new Date("2023-01-01"),
+            new Date("2023-12-31")
+        );
+
+        const comments: CommitComment[] = (await Array.fromAsync(it)).flat();
+
+        expect(comments).toHaveLength(0);
+
+        // Verify GraphQL queries
+        expect(gqlPaginateIteratorSpy).toHaveBeenCalledTimes(1);
+        expect(gqlPaginateIteratorSpy).toHaveBeenLastCalledWith(
+            print(CommitCommentsDocument),
+            expect.objectContaining({
+                login: "user123",
+            })
+        );
+    });
+
+    it("should filter comments by date range", async () => {
+        const idCounter = new Counter();
+        const oldComment = {
+            ...getCommitCommentMock(idCounter),
+            publishedAt: new Date("2022-06-15"),
+        };
+        const validComment = {
+            ...getCommitCommentMock(idCounter),
+            publishedAt: new Date("2023-06-15"),
+        };
+        const futureComment = {
+            ...getCommitCommentMock(idCounter),
+            publishedAt: new Date("2024-06-15"),
+        };
+
+        const commentsResponse: CommitCommentsQuery = {
+            user: {
+                commitComments: {
+                    nodes: [oldComment, validComment, futureComment],
+                    totalCount: 3,
+                    pageInfo: {
+                        startCursor: "cursor",
+                        hasPreviousPage: false,
+                    },
+                },
+            },
+        };
+
+        // Mock the iterator function specifically
+        const iteratorMock = {
+            [Symbol.asyncIterator]: () => {
+                const values = [commentsResponse];
+                let index = 0;
+                return {
+                    async next() {
+                        return {
+                            done: index >= values.length,
+                            value: values[index++],
+                        };
+                    },
+                };
+            },
+        };
+
+        // Spy on the paginate.iterator method
+        const octokit = new Octokit({ auth: "secret123" });
+        const gqlPaginateIteratorSpy = vi.spyOn(octokit.graphql.paginate, "iterator");
+
+        gqlPaginateIteratorSpy.mockReturnValueOnce(iteratorMock);
+
+        const it = fetchCommitComments(
+            octokit,
+            "user123",
+            new Date("2023-01-01"),
+            new Date("2023-12-31")
+        );
+
+        const comments: CommitComment[] = (await Array.fromAsync(it)).flat();
+
+        expect(comments).toHaveLength(1);
+        expect(comments[0]).toEqual(validComment);
+    });
+
 });
