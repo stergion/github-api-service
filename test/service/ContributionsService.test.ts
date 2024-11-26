@@ -516,4 +516,34 @@ describe("fetchCommitComments", () => {
         expect(comments[0]).toEqual(validComment);
     });
 
+    it("should throw NotGithubUser error on invalid user login", async () => {
+        const mockResponse = {
+            data: null,
+            errors: [
+                {
+                    type: "NOT_FOUND",
+                    path: ["user"],
+                },
+            ],
+        };
+
+        const mock = fetchMock
+            .createInstance()
+            .postOnce("https://api.github.com/graphql", (_url, request) => {
+                const body = JSON.parse(mock.callHistory.calls()[0].options.body!.toString());
+                expect(body.query).toEqual(print(CommitCommentsDocument));
+
+                return mockResponse;
+            });
+
+        const octokit = new Octokit({
+            auth: `secret123`,
+            request: {
+                fetch: mock.fetchHandler,
+            },
+        });
+
+        const it = fetchCommitComments(octokit, "notghuser", new Date(), new Date());
+        await expect(Array.fromAsync(it)).rejects.toThrow(NotGithubUser);
+    });
 });
