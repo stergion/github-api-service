@@ -14,6 +14,8 @@ export function errorResponseHandler(err: Error, req: Request, res: Response, ne
         return next(err);
     }
 
+    console.error(err);
+
     res.status(err.statusCode).json(err.toJsonResponse()).end();
 }
 
@@ -22,6 +24,8 @@ export function sseErrorHandler(err: Error, req: Request, res: Response, next: N
         return next(err);
     }
 
+    console.error(err);
+    
     const stream = new SSEStream(res);
     stream.streamError(err);
     res.end();
@@ -33,6 +37,7 @@ export function fallbackErrorHandler(
     res: Response<JsonResponse>,
     next: NextFunction
 ) {
+    console.error(err);
     const errorResponse = {
         statusCode: 500,
         name: "Internal Server Error",
