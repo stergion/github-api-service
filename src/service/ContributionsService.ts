@@ -19,6 +19,7 @@ import { sendQueryWindowedPaginated } from "../routes/helpers/sendQueries.js";
 import { windowDateFilter } from "../routes/helpers/windowDateFilter.js";
 import { DateKeys } from "../utils/UtilityTypes.js";
 import RepositoryNotFound from "../utils/errors/RepositoryNotFound.js";
+import NotGithubUser from "../utils/errors/NotGithubUser.js";
 
 export async function fetchRepositoryCommits(
     octokit: Octokit,
@@ -97,14 +98,24 @@ export async function* fetchCommitComments(
         print(CommitCommentsDocument),
         queryVariables
     );
-
-    for await (const queryResult of it) {
-        const nodesArray = (await getQueryNodes(queryResult)) as CommitComment[];
-        yield nodesArray.filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate));
-        // @ts-ignore
-        // Stop fetching if issue comment go too far back in time.
-        if (!!nodesArray.length && fromDate > new Date(nodesArray[0][dateFilterPropertyName]))
-            break;
+    try {
+        for await (const queryResult of it) {
+            const nodesArray = (await getQueryNodes(queryResult)) as CommitComment[];
+            yield nodesArray.filter(windowDateFilter(dateFilterPropertyName, fromDate, toDate));
+            // @ts-ignore
+            // Stop fetching if issue comment go too far back in time.
+            if (!!nodesArray.length && fromDate > new Date(nodesArray[0][dateFilterPropertyName]))
+                break;
+        }
+    } catch (error) {
+        if (error instanceof GraphqlResponseError && error.errors) {
+            for (const e of error.errors) {
+                if (e.type === "NOT_FOUND") {
+                    throw new NotGithubUser(login);
+                }
+            }
+        }
+        throw error;
     }
 }
 
