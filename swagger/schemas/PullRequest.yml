@@ -91,7 +91,18 @@ components:
                                 type: object
                                 properties:
                                     commit:
-                                        $ref: "#/components/schemas/CommitInfoLean"
+                                        type: object
+                                        properties:
+                                            id:
+                                                type: string
+                                            commitUrl:
+                                                type: string
+                                            changedFiles:
+                                                type: integer
+                                            additions:
+                                                type: integer
+                                            deletions:
+                                                type: integer
                 comments:
                     type: object
                     required:
