@@ -92,9 +92,7 @@ components:
                 files:
                     type: array
                     items:
-                        type: object
-                        properties:
-                            $ref: "#/components/schemas/CommitFile"
+                        $ref: "#/components/schemas/CommitFile"
         CommitFile:
             type: object
             required:
