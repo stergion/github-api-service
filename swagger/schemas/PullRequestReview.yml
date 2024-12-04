@@ -5,6 +5,8 @@ components:
             required:
                 - id
                 - url
+                - createdAt
+                - updatedAt
                 - state
                 - body
                 - repository
