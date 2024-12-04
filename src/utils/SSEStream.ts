@@ -12,6 +12,7 @@ export class SSEStream {
     }
 
     private initializeHeaders(): void {
+        this.res.setHeader("X-SSE-Content-Type", "application/json")
         this.res.setHeader("Content-Type", "text/event-stream");
         this.res.setHeader("Cache-Control", "no-cache");
         this.res.setHeader("Connection", "keep-open");
