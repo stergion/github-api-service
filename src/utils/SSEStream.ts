@@ -15,7 +15,7 @@ export class SSEStream {
         this.res.setHeader("Content-Type", "text/event-stream");
         this.res.setHeader("Cache-Control", "no-cache");
         this.res.setHeader("Connection", "keep-open");
-        this.res.status(207)
+        this.res.status(200)
 
         // Flush headers immediately
         if ("flushHeaders" in this.res) {

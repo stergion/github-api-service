@@ -40,7 +40,7 @@ const router = express.Router({ mergeParams: true });
  *           format: date
  *         description: End date for contributions range
  *     responses:
- *       207:
+ *       200:
  *         description: Stream of repositories
  *         content:
  *           text/event-stream:
@@ -121,7 +121,7 @@ router.get(
  *           format: date
  *         description: End date for commits range
  *     responses:
- *       207:
+ *       200:
  *         description: Stream of repositories
  *         content:
  *           text/event-stream:
