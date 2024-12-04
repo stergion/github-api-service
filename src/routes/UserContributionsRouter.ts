@@ -103,7 +103,7 @@ const router = express.Router({ mergeParams: true });
  *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
-    "/commits/:owner/:name/:fromDate/:toDate",
+    "/commits/:owner/:name/from/:fromDate/to/:toDate",
     [
         validator.loginParamValidator(),
         validator.githubOwnerParamValidator(),
