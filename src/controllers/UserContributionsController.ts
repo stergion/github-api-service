@@ -19,6 +19,7 @@ import { fetchUserInfo } from "../service/UserService.js";
 import { DateWindows } from "../utils/DateWindows.js";
 import { SSEError } from "../utils/errors/SSEError.js";
 import { SSEStream } from "../utils/SSEStream.js";
+import { Issue, IssueNode, PullRequest, PullRequestNode, PullRequestReview, PullRequestReviewNode } from "../graphql/dto_types.js";
 
 type CommitRequestParams = {
     login: string;
@@ -103,6 +104,7 @@ export async function getIssues(req: Request<IssueRequestParams>, res: Response)
         let result = dateWindows
             .map(sendQueryWindowedPaginated(octokit, IssuesDocument, issuesQueryVariables))
             .map(getQueryNodes)
+            .map(async (i) =>  (await i).map((i:IssueNode):Issue => i.issue))
             .map(stream.streamResponse.bind(stream));
         await Promise.all(result);
 
@@ -131,6 +133,7 @@ export async function getPullRequests(req: Request<PullRequestRequestParams>, re
         const result = dateWindows
             .map(sendQueryWindowedPaginated(octokit, PullRequestsDocument, pullRequestsVariables))
             .map(getQueryNodes)
+            .map(async (i) =>  (await i).map((i:PullRequestNode):PullRequest => i.pullRequest))
             .map(stream.streamResponse.bind(stream));
         await Promise.all(result);
 
@@ -167,6 +170,7 @@ export async function getPullRequestReviews(
                 )
             )
             .map(getQueryNodes)
+            .map(async (i) =>  (await i).map((i:PullRequestReviewNode):PullRequestReview => i.pullRequestReview))
             .map(stream.streamResponse.bind(stream));
         await Promise.all(result);
 
