@@ -17,9 +17,12 @@ export {
     CommitComment,
     CommitFile,
     CommitWithFiles,
+    Issue,
     IssueNode,
     IssueComment,
+    PullRequest,
     PullRequestNode,
+    PullRequestReview,
     PullRequestReviewNode,
     Repository,
     UserInfo,
@@ -50,6 +53,8 @@ type IssueNode = NonNullable<
     >[number]
 >;
 
+type Issue = IssueNode["issue"] 
+
 type PullRequestNode = NonNullable<
     GetNestedType<
         PullRequestsQuery,
@@ -57,11 +62,15 @@ type PullRequestNode = NonNullable<
     >[number]
 >;
 
+type PullRequest = PullRequestNode["pullRequest"];
+
 type PullRequestReviewNode = NonNullable<
     GetNestedType<
         PullRequestReviewsQuery,
         ["user", "contributionsCollection", "pullRequestReviewContributions", "nodes"]
     >[number]
 >;
+
+type PullRequestReview = PullRequestReviewNode["pullRequestReview"];
 
 type Repository = NonNullable<RepositoryQuery["repository"]>;
