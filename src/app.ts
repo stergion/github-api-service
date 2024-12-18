@@ -84,5 +84,5 @@ app.use(fallbackErrorHandler);
 app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`);
     console.log();
-    console.log(`API docs on http://localhost:${port}/api-docs`);
+    console.log(`API docs on http://localhost:${port}/api-docs \n`);
 });
