@@ -62,6 +62,10 @@ const swaggerSpec = swaggerJsdoc(options);
 const app = express();
 
 // Middleware
+app.use("/", (req, res, next) => {
+    console.log(`Request: ${req.method} ${req.originalUrl}\n`);
+    next();
+});
 app.use(injectOctokit());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get("/api-docs.json", (req, res) => {
