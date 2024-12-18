@@ -1,5 +1,14 @@
 import { Request, Response } from "express";
 
+import { GraphqlResponseError } from "@octokit/graphql";
+import {
+    Issue,
+    IssueNode,
+    PullRequest,
+    PullRequestNode,
+    PullRequestReview,
+    PullRequestReviewNode,
+} from "../graphql/dto_types.js";
 import {
     IssuesDocument,
     IssuesQueryVariables,
@@ -17,9 +26,9 @@ import {
 } from "../service/ContributionsService.js";
 import { fetchUserInfo } from "../service/UserService.js";
 import { DateWindows } from "../utils/DateWindows.js";
+import NotGithubUser from "../utils/errors/NotGithubUser.js";
 import { SSEError } from "../utils/errors/SSEError.js";
 import { SSEStream } from "../utils/SSEStream.js";
-import { Issue, IssueNode, PullRequest, PullRequestNode, PullRequestReview, PullRequestReviewNode } from "../graphql/dto_types.js";
 
 type CommitRequestParams = {
     login: string;
@@ -104,9 +113,20 @@ export async function getIssues(req: Request<IssueRequestParams>, res: Response)
         let result = dateWindows
             .map(sendQueryWindowedPaginated(octokit, IssuesDocument, issuesQueryVariables))
             .map(getQueryNodes)
-            .map(async (i) =>  (await i).map((i:IssueNode):Issue => i.issue))
+            .map(async (i) => (await i).map((i: IssueNode): Issue => i.issue))
             .map(stream.streamResponse.bind(stream));
-        await Promise.all(result);
+        try {
+            await Promise.all(result);
+        } catch (error) {
+            if (error instanceof GraphqlResponseError && error.errors) {
+                for (const e of error.errors) {
+                    if (e.type === "NOT_FOUND") {
+                        throw new NotGithubUser(login);
+                    }
+                }
+            }
+            throw error;
+        }
 
         res.end();
     } catch (error: any) {
@@ -133,9 +153,20 @@ export async function getPullRequests(req: Request<PullRequestRequestParams>, re
         const result = dateWindows
             .map(sendQueryWindowedPaginated(octokit, PullRequestsDocument, pullRequestsVariables))
             .map(getQueryNodes)
-            .map(async (i) =>  (await i).map((i:PullRequestNode):PullRequest => i.pullRequest))
+            .map(async (i) => (await i).map((i: PullRequestNode): PullRequest => i.pullRequest))
             .map(stream.streamResponse.bind(stream));
-        await Promise.all(result);
+            try {
+                await Promise.all(result);
+            } catch (error) {
+                if (error instanceof GraphqlResponseError && error.errors) {
+                    for (const e of error.errors) {
+                        if (e.type === "NOT_FOUND") {
+                            throw new NotGithubUser(login);
+                        }
+                    }
+                }
+                throw error;
+            }
 
         res.end();
     } catch (error: any) {
@@ -170,9 +201,22 @@ export async function getPullRequestReviews(
                 )
             )
             .map(getQueryNodes)
-            .map(async (i) =>  (await i).map((i:PullRequestReviewNode):PullRequestReview => i.pullRequestReview))
+            .map(async (i) =>
+                (await i).map((i: PullRequestReviewNode): PullRequestReview => i.pullRequestReview)
+            )
             .map(stream.streamResponse.bind(stream));
-        await Promise.all(result);
+            try {
+                await Promise.all(result);
+            } catch (error) {
+                if (error instanceof GraphqlResponseError && error.errors) {
+                    for (const e of error.errors) {
+                        if (e.type === "NOT_FOUND") {
+                            throw new NotGithubUser(login);
+                        }
+                    }
+                }
+                throw error;
+            }
 
         res.end();
     } catch (error: any) {
