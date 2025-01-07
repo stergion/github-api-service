@@ -8,13 +8,11 @@ export class InternalServerError extends StructuredError {
 
     constructor(error?: Error | unknown) {
         super();
-        
+
         if (error instanceof Error) {
-            this.message = error.message;
             this.cause = error;
-        } else {
-            this.message = "An unexpected error occurred";
         }
+        this.message = "An unexpected error occurred";
     }
 
     toJsonResponse() {
