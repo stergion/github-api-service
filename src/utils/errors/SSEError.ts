@@ -18,7 +18,7 @@ export class SSEError extends Error {
         if (err instanceof StructuredError) {
             this.casue = err;
         } else {
-            this.casue = new InternalServerError(err.message);
+            this.casue = new InternalServerError(err);
         }
     }
 
