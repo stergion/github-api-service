@@ -162,7 +162,7 @@ router.get(
  *                       $ref: '#/components/schemas/InternalServerError'
  */
 router.get(
-    "/repositories/committed-to/from/:fromDate/to/:toDate",
+    "/committed-to/from/:fromDate/to/:toDate",
     [
         validator.loginParamValidator(),
         validator.dateParamValidator("fromDate"),
