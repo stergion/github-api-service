@@ -17,47 +17,8 @@ env:
     REGISTRY: ghcr.io # GitHub Container Registry
     IMAGE_NAME: ${{ github.repository }}
 
-concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
-
 jobs:
-    check-last-run:
-        runs-on: ubuntu-latest
-        outputs:
-            should_run: ${{ steps.check.outputs.should_run }}
-        steps:
-            - id: check
-              run: |
-                  # Get the timestamp of the last successful run
-                  LAST_RUN=$(gh api /repos/${{ github.repository }}/actions/workflows/$(basename ${{ github.workflow_ref }})/runs \
-                    --jq '.workflow_runs[] | select(.conclusion == "success") | .created_at' \
-                    --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                    | head -n1)
-
-                  if [ -z "$LAST_RUN" ]; then
-                    echo "No previous successful run found"
-                    echo "should_run=true" >> $GITHUB_OUTPUT
-                    exit 0
-                  fi
-
-                  # Convert timestamps to seconds since epoch
-                  LAST_RUN_SECONDS=$(date -d "$LAST_RUN" +%s)
-                  CURRENT_SECONDS=$(date +%s)
-                  DIFF_SECONDS=$((CURRENT_SECONDS - LAST_RUN_SECONDS))
-
-                  # Check if more than 1 hour (3600 seconds) has passed
-                  if [ $DIFF_SECONDS -ge 3600 ]; then
-                    echo "More than 1 hour since last run"
-                    echo "should_run=true" >> $GITHUB_OUTPUT
-                  else
-                    echo "Less than 1 hour since last run"
-                    echo "should_run=false" >> $GITHUB_OUTPUT
-                  fi
-
     build-and-push:
-        needs: check-last-run
-        if: github.event_name == 'workflow_dispatch' || needs.check-last-run.outputs.should_run == 'true'
         runs-on: ubuntu-latest
         permissions:
             contents: read
