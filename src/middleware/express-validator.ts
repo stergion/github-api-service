@@ -10,7 +10,7 @@ function GitHubNameParamValidator(name: string, alias: string) {
         .withMessage(`GitHub ${alias} is required`)
         .isString()
         .withMessage(`GitHub ${alias} must be a string`)
-        .isLength({ min: 1, max: 25 })
+        .isLength({ min: 1, max: 255 })
         .withMessage(`GitHub ${alias} is too long`)
         .matches(/^[a-zA-Z0-9-]+$/)
         .withMessage(`GitHub ${alias} can only contain alphanumeric characters and hyphens`);
